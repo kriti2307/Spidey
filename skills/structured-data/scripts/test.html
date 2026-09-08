@@ -1,17 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "ABC Technologies"
-    }
-    </script>
+  <meta charset="UTF-8">
+  <title>Trattoria Bella - Italian Restaurant</title>
 </head>
-
 <body>
-    <h1>ABC Technologies</h1>
-    <p>We provide software solutions to businesses.</p>
+ 
+  <header>
+    <h1>Trattoria Bella</h1>
+    <p>Authentic Italian cuisine in the heart of downtown.</p>
+    <nav>
+      <a href="/menu">View Menu</a>
+      <a href="/reserve">Book a Table</a>
+    </nav>
+  </header>
+ 
+  <main>
+    <p>
+      Welcome to Trattoria Bella. Browse our menu, reserve a table for tonight,
+      and enjoy the best cuisine in town. Open daily from 5pm.
+    </p>
+  </main>
+ 
+  <!-- 1. Valid Restaurant entity, but missing 'address' and 'telephone'
+          -> triggers SD008 (missing recommended properties) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["Restaurant", "LocalBusiness"],
+    "name": "Trattoria Bella"
+  }
+  </script>
+ 
+  <!-- 2. @graph wrapper with two nested entities:
+          - Organization name conflicts with the name in block 0 -> SD005
+          - Organization name also isn't in the visible text -> SD006
+          - WebPage entity is fine, matches visible name/url -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Trattoria Bella Holdings LLC"
+      },
+      {
+        "@type": "WebPage",
+        "name": "Trattoria Bella",
+        "url": "https://example.com/"
+      }
+    ]
+  }
+  </script>
+ 
+  <!-- 3. Product entity on a page with restaurant signals, not product signals
+          -> SD007 (schema type looks mismatched vs. page content)
+          Also missing 'image' and 'offers' -> SD008 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Trattoria Bella"
+  }
+  </script>
+ 
+  <!-- 4. Missing @context entirely -> SD003 -->
+  <script type="application/ld+json">
+  {
+    "@type": "Organization",
+    "name": "Trattoria Bella",
+    "url": "https://example.com/"
+  }
+  </script>
+ 
+  <!-- 5. Missing @type entirely -> SD004 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "name": "Trattoria Bella"
+  }
+  </script>
+ 
+  <!-- 6. Malformed JSON (trailing comma) -> SD002 (invalid JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Trattoria Bella",
+  }
+  </script>
+ 
+  <!-- 7. Empty block -> SD002 (empty JSON-LD block) -->
+  <script type="application/ld+json"></script>
+ 
+  <!-- 8. Valid JSON but not an object/array/@graph -> SD002 (unexpected structure) -->
+  <script type="application/ld+json">
+  "just a string, not an entity"
+  </script>
+ 
+  <!-- 9. Hidden inside an HTML comment - should NOT be picked up as a
+          real JSON-LD block, and its content should NOT count as
+          visible text for any of the checks above. -->
+  <!--
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Product", "name": "Ghost Product"}
+  </script>
+  -->
+ 
+  <!-- 10. A plain script with unrelated text - should never leak into
+           "visible text" used by SD006/SD007 -->
+  <script>
+    var internalNote = "ThisShouldNeverCountAsVisiblePageContent";
+  </script>
+ 
 </body>
 </html>
