@@ -1,6 +1,100 @@
 import json
 from bs4 import BeautifulSoup
 
+def check_schema_type(soup, data, index):
+    findings = []
+
+    if not isinstance(data, dict):
+        return findings
+
+    schema_type = data.get("@type")
+
+    if not schema_type:
+        return findings
+
+    if isinstance(schema_type, list):
+        schema_types = [str(t).lower() for t in schema_type]
+    else:
+        schema_types = [str(schema_type).lower()]
+
+    visible_text = soup.get_text(" ", strip=True).lower()
+
+    # Strong page-type signals
+    page_type_signals = {
+        "restaurant": [
+            "restaurant",
+            "menu",
+            "book a table",
+            "reserve a table",
+            "cuisine"
+        ],
+        "hotel": [
+            "hotel",
+            "check-in",
+            "check-out",
+            "rooms",
+            "hotel booking"
+        ],
+        "event": [
+            "event",
+            "conference",
+            "register",
+            "venue",
+            "date and time"
+        ],
+        "product": [
+            "add to cart",
+            "buy now",
+            "product",
+            "price",
+            "in stock"
+        ]
+    }
+
+    detected_type = None
+
+    for page_type, signals in page_type_signals.items():
+        matches = sum(signal in visible_text for signal in signals)
+
+        # Require multiple signals so we don't flag based on one word.
+        if matches >= 2:
+            detected_type = page_type
+            break
+
+    if not detected_type:
+        return findings
+
+    compatible_types = {
+        "restaurant": {"restaurant", "foodestablishment", "localbusiness"},
+        "hotel": {"hotel", "lodgingbusiness", "localbusiness"},
+        "event": {"event"},
+        "product": {"product"},
+    }
+
+    if not any(
+        expected_type in schema_types
+        for expected_type in compatible_types[detected_type]
+    ):
+        findings.append({
+            "id": f"SD007-{index}",
+            "title": "Potentially inappropriate Schema.org type",
+            "severity": "medium",
+            "evidence": (
+                f"The page contains strong signals of a {detected_type} page, "
+                f"but the structured data uses type(s): "
+                f"{', '.join(schema_types)}."
+            ),
+            "suggested_action": {
+                "summary": (
+                    f"Review whether a more specific Schema.org type such as "
+                    f"{detected_type.title()} better represents this page."
+                ),
+                "priority": "medium"
+            }
+        })
+
+    return findings
+
 def check_visible_content_conflicts(soup, data, index):
     findings = []
 
@@ -126,7 +220,10 @@ def audit_structured_data(html: str, url: str) -> list:
             findings.extend(
                 check_visible_content_conflicts(soup, data, index)
             )
-
+            findings.extend(
+                check_schema_type(soup, data, index)
+            )
+ 
             if "@context" not in data:
                 findings.append({
                     "id": f"SD003-{index}",
@@ -153,7 +250,6 @@ def audit_structured_data(html: str, url: str) -> list:
 
     return findings
 
-
 if __name__ == "__main__":
     with open("test.html", "r", encoding="utf-8") as f:
         html = f.read()
@@ -163,4 +259,15 @@ if __name__ == "__main__":
         "https://example.com"
     )
 
-    print(json.dumps(results, indent=2))
+    if results:
+        print(json.dumps({
+            "status": "issues_found",
+            "findings": results
+        }, indent=2))
+    else:
+        print(json.dumps({
+            "status": "pass",
+            "message": "No structured data issues detected.",
+            "findings": []
+        }, indent=2))
+
