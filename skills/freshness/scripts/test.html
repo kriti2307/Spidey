@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freshness Audit Test</title>
+
+    <!--
+        FR003 TEST:
+        Visible event date below = August 1, 2026
+        Structured data startDate = August 15, 2026
+        This should trigger a structured-vs-visible conflict.
+    -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "AI Conference 2026",
+        "startDate": "2026-08-15",
+        "dateModified": "2026-01-01"
+    }
+    </script>
+</head>
+
+<body>
+
+    <h1>AI Conference 2026</h1>
+
+    <!-- =========================================================
+         FR002: Past event still promoted as upcoming
+         Current date is September 2026.
+         ========================================================= -->
+    <section>
+        <h2>Upcoming Conference</h2>
+
+        <p>
+            The conference will be held on August 1, 2026.
+            Join us for this exciting event.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         FR001: Expired deadline still presented as active
+         ========================================================= -->
+    <section>
+        <h2>Registration</h2>
+
+        <p>
+            Registration deadline: July 15, 2026.
+        </p>
+
+        <p>
+            Register now to secure your place.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         FR005: JSON-LD dateModified vs visible "last updated"
+         JSON-LD says Jan 1, 2026.
+         Visible text says Feb 1, 2026.
+         ========================================================= -->
+    <section>
+        <p>
+            Last updated: February 1, 2026.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         FR006: Old self-declared price
+         More than 180 days old.
+         ========================================================= -->
+    <section>
+        <h2>Pricing</h2>
+
+        <p>
+            Price as of January 1, 2025: ₹999.
+        </p>
+
+        <p>
+            Starting price: ₹999.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         FR006: Old self-declared business hours
+         ========================================================= -->
+    <section>
+        <h2>Opening Hours</h2>
+
+        <p>
+            Opening hours as of January 1, 2025:
+            Monday to Friday, 9 AM to 5 PM.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         FR006: Old self-declared availability
+         ========================================================= -->
+    <section>
+        <h2>Availability</h2>
+
+        <p>
+            Availability updated on January 1, 2025:
+            Seats are available now.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         CLEAN CASE:
+         A past event that is clearly acknowledged as past.
+         This should NOT trigger FR002.
+         ========================================================= -->
+    <section>
+        <h2>Past Events</h2>
+
+        <p>
+            Our July 1, 2026 conference has ended.
+            Thank you to everyone who attended.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         CLEAN CASE:
+         Expired deadline explicitly acknowledged as closed.
+         This should NOT trigger FR001.
+         ========================================================= -->
+    <section>
+        <p>
+            The early registration deadline of June 1, 2026
+            has passed. Registration is now closed.
+        </p>
+    </section>
+
+
+    <!-- =========================================================
+         Another current-looking fact without an explicit
+         freshness date. This should NOT automatically trigger
+         FR006 because the detector intentionally avoids
+         assuming that an undated fact is stale.
+         ========================================================= -->
+    <section>
+        <h2>Current Information</h2>
+
+        <p>
+            Opening hours: Monday to Friday, 10 AM to 6 PM.
+        </p>
+
+        <p>
+            Price: ₹1,499.
+        </p>
+
+        <p>
+            Tickets available now.
+        </p>
+    </section>
+
+</body>
+</html>
