@@ -2,7 +2,7 @@ const { chromium } = require("playwright");
 
 const {
     loadPage
-} = require("./src/crawler/page-loader");
+} = require("../crawler/page-loader");
 
 async function main() {
 

@@ -4,45 +4,45 @@ const {
     normalizeUrl,
     isSameOrigin,
     isProbablyCrawlableUrl
-} = require("./src/crawler/url-utils");
+} = require("../crawler/url-utils")
 
 const {
     getRobotsRules,
     isAllowed,
     getCrawlDelay
-} = require("./src/crawler/robots");
+} = require("../crawler/robots");
 
 const {
     loadPage
-} = require("./src/crawler/page-loader");
+} = require("../crawler/page-loader");
 
 const {
     discoverSitemap
-} = require("./src/crawler/sitemap");
+} = require("../crawler/sitemap");
 
 const {
     detectRenderGap
-} = require("./src/renderer/render-gap");
+} = require("../renderer/render-gap");
 
 const {
     extractPageData
-} = require("./src/extractor/html-extractor");
+} = require("../extractor/html-extractor");
 
 const {
     runRenderChecks
-} = require("./src/audit/render-checks");
+} = require("../audit/render-checks");
 
 const {
     runCrawlChecks
-} = require("./src/audit/crawl-checks");
+} = require("../audit/crawl-checks");
 
 const {
     runHtmlChecks
-} = require("./src/audit/html-checks");
+} = require("../audit/html-checks");
 
 const {
     createRateLimiter
-} = require("./src/crawler/rate-limit");
+} = require("../crawler/rate-limit");
 
 
 async function crawlWebsite(startUrl, maxPages = 20) {
