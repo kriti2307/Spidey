@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS Test</title>
+</head>
+
+<body>
+
+    <div id="app"></div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById("app").innerHTML = `
+                <h1>My AI Company</h1>
+
+                <p>
+                    We build intelligent software solutions
+                    for businesses across India.
+                </p>
+
+                <h2>Our Products</h2>
+
+                <p>
+                    Our products help companies automate
+                    their daily operations.
+                </p>
+
+                <a href="/products">View Products</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact</a>
+            `;
+        }, 1000);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+User-agent: AdobeRound3Crawler
+Disallow: /blocked

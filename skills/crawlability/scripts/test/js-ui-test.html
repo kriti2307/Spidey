@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS UI Test</title>
+</head>
+
+<body>
+
+    <div role="heading" aria-level="1">
+    Company Name
+</div>
+
+    <p>
+        We provide software solutions for businesses.
+    </p>
+
+    <div id="app"></div>
+
+    <div style="display:none">
+        This is hidden content that should not be counted.
+        This should not trigger a JavaScript rendering finding.
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById("app").innerHTML = `
+                <div class="cookie-banner">
+                    <p>
+                        We use cookies to improve your experience.
+                        You can manage your preferences below.
+                    </p>
+                    <button>Accept Cookies</button>
+                    <button>Manage Preferences</button>
+                </div>
+            `;
+        }, 1000);
+    </script>
+
+</body>
+</html>
