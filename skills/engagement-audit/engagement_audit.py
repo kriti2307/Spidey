@@ -614,17 +614,20 @@ def check3_link_crawl(site_url, home_soup, findings, unverified, rp):
             "medium",
         ))
 
-    if not broken and not dead_ends:
-        findings.append(make_finding(
-            "opportunity", "Consider related-content links between loosely connected pages",
-            "low",
-            f"No broken links or dead-ends found across {len(visited)} crawled pages.",
-            "Strengthen internal linking between related but currently unlinked pages.",
-            ["Identify topically related pages that don't currently link to each other.",
-             "Add contextual related-content links between them.",
-             "Monitor whether this improves on-site navigation flow."],
-            "low",
-        ))
+        dead_ends = [u for u, (o, c) in page_link_counts.items() if not o and not c]
+
+        for url in dead_ends[:10]:
+            findings.append(make_finding(
+                "issue", "Dead-end page with no outlinks or substantive content", "medium",
+                f"{url}: page loaded (HTTP 200) but has no outlinks beyond nav/header/footer "
+                f"and fewer than 250 characters of visible text after removing nav/header/footer "
+                f"boilerplate.",
+                "Give the page either real content or a path forward.",
+                ["Add substantive, page-specific content if this is meant to be a real destination.",
+                "If not, add related/next-step links so visitors aren't stuck.",
+                "Consider removing or redirecting the page if it serves no purpose."],
+                "medium",
+            ))
 
 
 def check4_mobile(site_url, home_soup, findings):
