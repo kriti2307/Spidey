@@ -1,48 +1,55 @@
 const { chromium } = require("playwright");
+const QUIET = process.env.CRAWL_JSON === "1";
+
+function log(...args) {
+    if (!QUIET) {
+        console.log(...args);
+    }
+}
 
 const {
     normalizeUrl,
     isSameOrigin,
     isProbablyCrawlableUrl
-} = require("./src/crawler/url-utils");
+} = require("../crawler/url-utils")
 
 const {
     getRobotsRules,
     isAllowed,
     getCrawlDelay
-} = require("./src/crawler/robots");
+} = require("../crawler/robots");
 
 const {
     loadPage
-} = require("./src/crawler/page-loader");
+} = require("../crawler/page-loader");
 
 const {
     discoverSitemap
-} = require("./src/crawler/sitemap");
+} = require("../crawler/sitemap");
 
 const {
     detectRenderGap
-} = require("./src/renderer/render-gap");
+} = require("../renderer/render-gap");
 
 const {
     extractPageData
-} = require("./src/extractor/html-extractor");
+} = require("../extractor/html-extractor");
 
 const {
     runRenderChecks
-} = require("./src/audit/render-checks");
+} = require("../audit/render-checks");
 
 const {
     runCrawlChecks
-} = require("./src/audit/crawl-checks");
+} = require("../audit/crawl-checks");
 
 const {
     runHtmlChecks
-} = require("./src/audit/html-checks");
+} = require("../audit/html-checks");
 
 const {
     createRateLimiter
-} = require("./src/crawler/rate-limit");
+} = require("../crawler/rate-limit");
 
 
 async function crawlWebsite(startUrl, maxPages = 20) {
@@ -64,7 +71,7 @@ async function crawlWebsite(startUrl, maxPages = 20) {
     // sitemap.xml
     const sitemapUrls = await discoverSitemap(startUrl);
 
-    console.log("Sitemap discovered:", sitemapUrls.length);
+    log("Sitemap discovered:", sitemapUrls.length);
 
     // Initial queue
     const queue = [normalizeUrl(startUrl)];
@@ -85,6 +92,7 @@ async function crawlWebsite(startUrl, maxPages = 20) {
 
     const visited = new Set();
     const results = [];
+    const blockedUrls = [];
 
     while (
         queue.length > 0 &&
@@ -102,17 +110,19 @@ async function crawlWebsite(startUrl, maxPages = 20) {
         // robots.txt
         if (!isAllowed(robots, currentUrl)) {
 
-            console.log(
+            log(
                 "Blocked by robots.txt:",
                 currentUrl
             );
+
+            blockedUrls.push(currentUrl);
 
             continue;
         }
 
         visited.add(currentUrl);
 
-        console.log(
+        log(
             `[${visited.size}/${maxPages}]`,
             currentUrl
         );
@@ -124,7 +134,7 @@ async function crawlWebsite(startUrl, maxPages = 20) {
             currentUrl
         );
 
-        console.log(
+        log(
             "Redirects:",
             result.redirects
         );
@@ -160,6 +170,16 @@ async function crawlWebsite(startUrl, maxPages = 20) {
             }
         }
 
+        let html = null;
+
+        if (result.success) {
+            try {
+                html = await page.content();
+            } catch (error) {
+                html = null;
+            }
+        }
+
         const crawlFindings = runCrawlChecks(result);
 
         const renderFindings = runRenderChecks({
@@ -173,9 +193,19 @@ async function crawlWebsite(startUrl, maxPages = 20) {
         });
 
         results.push({
-            ...result,
-            renderGap,
+            url: result.requestedUrl,
+            finalUrl: result.finalUrl,
+            status: result.status,
+            success: result.success,
+            redirects: result.redirects,
+            error: result.error,
+            errorType: result.errorType,
+
+            html,
+
             pageData,
+            renderGap,
+
             findings: [
                 ...crawlFindings,
                 ...renderFindings,
@@ -222,7 +252,7 @@ async function crawlWebsite(startUrl, maxPages = 20) {
 
         } catch (error) {
 
-            console.log(
+            log(
                 "Link extraction failed:",
                 error.message
             );
@@ -231,39 +261,15 @@ async function crawlWebsite(startUrl, maxPages = 20) {
 
     await browser.close();
 
-    return results;
+    return {
+        site: startUrl,
+        sitemapUrls,
+        blockedUrls,
+        pages: results
+    };
 }
 
 
-async function main() {
-
-    const results = await crawlWebsite(
-        "http://localhost:3000/crawl-test.html",
-        10
-    );
-
-    console.log("\nCrawl complete");
-    console.log(
-        "Pages crawled:",
-        results.length
-    );
-
-    for (const page of results) {
-    console.log("\n==============================");
-    console.log("URL:", page.requestedUrl);
-    console.log("Status:", page.status);
-    console.log("Final URL:", page.finalUrl);
-
-    console.log("\nFindings:");
-
-    if (page.findings.length === 0) {
-        console.log("No findings");
-    } else {
-        console.log(
-            JSON.stringify(page.findings, null, 2)
-        );
-    }
-}
-}
-
-main();
+module.exports = {
+    crawlWebsite
+};

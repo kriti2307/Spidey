@@ -2,7 +2,7 @@ const { chromium } = require("playwright");
 
 const {
     detectRenderGap
-} = require("./src/renderer/render-gap");
+} = require("../renderer/render-gap");
 
 async function main() {
     const browser = await chromium.launch({

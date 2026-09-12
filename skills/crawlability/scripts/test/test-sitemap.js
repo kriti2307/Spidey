@@ -1,4 +1,4 @@
-const { discoverSitemap } = require("./src/crawler/sitemap");
+const { discoverSitemap } = require("../crawler/sitemap");
 
 async function main() {
     const urls = await discoverSitemap("https://www.wikipedia.org");
