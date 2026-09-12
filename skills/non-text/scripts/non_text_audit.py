@@ -2,9 +2,9 @@
 Non-Text Content Audit
 -----------------------
 Detects information that may exist only in non-text form (images, PDFs,
-audio/video, inline SVG, CSS background-images) and would therefore be
-invisible or degraded for text-based AI agents / crawlers, not just for
-screen-reader users.
+audio/video, inline SVG, CSS background-images, and embedded video/audio
+iframes) and would therefore be invisible or degraded for text-based AI
+agents / crawlers, not just for screen-reader users.
 
 Design principle: avoid "existence = problem" rules. A PDF, an image, or
 a background-image is not automatically an issue -- it's only an issue
@@ -17,13 +17,20 @@ caption right next to an unlabeled image).
 import json
 import logging
 import re
+import urllib.robotparser
 from io import BytesIO
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
-import pytesseract
-from PIL import Image
+
+try:
+    import pytesseract
+    from PIL import Image
+    OCR_AVAILABLE = True
+except ImportError:
+    OCR_AVAILABLE = False
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("non_text_audit")
@@ -44,6 +51,7 @@ MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024  # safety cap for PDFs/images
 MIN_OCR_TEXT_LENGTH = 10
 MIN_MEANINGFUL_ALT_LENGTH = 10
 MIN_IMAGE_DIMENSION_FOR_OCR = 40  # skip tiny icons/spacers/social buttons
+MAX_IMAGES_TO_OCR = 15  # runtime budget cap -- OCR is the slowest check here
 
 GENERIC_ALT_WORDS = {
     "image", "photo", "picture", "graphic", "icon", "logo",
@@ -67,9 +75,24 @@ CAPTION_KEYWORDS = ("captions", "subtitles") + TRANSCRIPT_KEYWORDS
 
 BG_IMAGE_PATTERN = re.compile(r"background(-image)?\s*:\s*url\(([^)]+)\)")
 
+# Known video/audio embed providers -- these carry information via an
+# <iframe>, not a native <video>/<audio> tag, so they need a separate check.
+VIDEO_EMBED_DOMAINS = (
+    "youtube.com", "youtube-nocookie.com", "youtu.be",
+    "vimeo.com", "player.vimeo.com",
+    "wistia.com", "wistia.net",
+    "dailymotion.com",
+    "loom.com",
+)
+AUDIO_EMBED_DOMAINS = (
+    "soundcloud.com",
+    "spotify.com",
+)
+
 # process-level caches so repeated links/images on one page aren't re-fetched
 _pdf_cache = {}
 _image_cache = {}
+_robots_cache = {}
 
 
 # ---------------------------------------------------------------------------
@@ -78,6 +101,40 @@ _image_cache = {}
 
 def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text or "").strip().lower()
+
+
+def _resolve_url(base_url: str, maybe_relative: str) -> str:
+    """Resolve a possibly-relative src/href against the page's URL so
+    relative paths (very common in real sites) aren't silently skipped."""
+    if not maybe_relative:
+        return maybe_relative
+    return urljoin(base_url, maybe_relative.strip())
+
+
+def _is_allowed_by_robots(url: str) -> bool:
+    """Check robots.txt for the URL's origin before fetching. Fails open
+    (treats as allowed) only if robots.txt itself can't be reached, since
+    an unreachable robots.txt is not a signal that fetching is disallowed."""
+    try:
+        parsed = urlparse(url)
+        origin = f"{parsed.scheme}://{parsed.netloc}"
+    except Exception:
+        return True
+
+    if origin not in _robots_cache:
+        rp = urllib.robotparser.RobotFileParser()
+        rp.set_url(urljoin(origin, "/robots.txt"))
+        try:
+            rp.read()
+        except Exception:
+            _robots_cache[origin] = None  # couldn't fetch -- fail open
+        else:
+            _robots_cache[origin] = rp
+
+    rp = _robots_cache[origin]
+    if rp is None:
+        return True
+    return rp.can_fetch(REQUEST_HEADERS["User-Agent"], url)
 
 
 def is_generic_alt(alt: str) -> bool:
@@ -131,6 +188,19 @@ def get_link_description(link) -> str:
     return ""
 
 
+def _is_decorative(img) -> bool:
+    """An image is treated as intentionally decorative if alt="" OR
+    role="presentation"/"none" is set -- both are standard ways authors
+    mark an image as carrying no information."""
+    alt = img.get("alt")
+    role = (img.get("role") or "").strip().lower()
+    if alt is not None and alt.strip() == "":
+        return True
+    if role in {"presentation", "none"}:
+        return True
+    return False
+
+
 def _nearby_caption_context(img) -> str | None:
     """
     Returns a short note if the image has plausible surrounding context
@@ -163,6 +233,8 @@ def _has_accessible_name(el) -> bool:
 
 
 def _safe_get(url, stream=False):
+    if not _is_allowed_by_robots(url):
+        raise PermissionError(f"Disallowed by robots.txt: {url}")
     resp = requests.get(
         url, timeout=REQUEST_TIMEOUT, headers=REQUEST_HEADERS, stream=stream
     )
@@ -238,6 +310,19 @@ def check_pdf_text_content(pdf_url: str, index: int) -> list:
                 },
             })
 
+    except PermissionError as e:
+        findings.append({
+            "id": f"NT013-{index}",
+            "title": "PDF not analyzed -- disallowed by robots.txt",
+            "type": "info",
+            "severity": "low",
+            "confidence": "high",
+            "evidence": str(e),
+            "suggested_action": {
+                "summary": "No action -- this file was skipped to respect robots.txt.",
+                "priority": "low",
+            },
+        })
     except Exception as e:
         findings.append({
             "id": f"NT006-{index}",
@@ -260,10 +345,13 @@ def check_pdf_text_content(pdf_url: str, index: int) -> list:
 # Image checks (alt text, OCR, functional images, inline SVG)
 # ---------------------------------------------------------------------------
 
-def check_image_text(image: Image.Image, index: int, visible_page_text: str) -> list:
+def check_image_text(image, index: int, visible_page_text: str) -> list:
     """OCR an image and flag it only if it contains text NOT already
     present as normal page text (avoids flagging redundant images)."""
     findings = []
+
+    if not OCR_AVAILABLE:
+        return findings
 
     if image.width < MIN_IMAGE_DIMENSION_FOR_OCR or image.height < MIN_IMAGE_DIMENSION_FOR_OCR:
         return findings  # almost certainly an icon/spacer, not worth OCR
@@ -271,6 +359,9 @@ def check_image_text(image: Image.Image, index: int, visible_page_text: str) -> 
     try:
         detected_text = pytesseract.image_to_string(image).strip()
     except Exception:
+        # Covers both OCR failures on this image and a missing tesseract
+        # binary (pytesseract raises TesseractNotFoundError, a subclass
+        # of EnvironmentError, at call time -- not at import time).
         logger.warning("OCR failed for image #%s", index + 1, exc_info=True)
         return findings
 
@@ -392,7 +483,7 @@ def check_background_images(soup) -> list:
 
 
 # ---------------------------------------------------------------------------
-# Multimedia checks
+# Multimedia checks (native <audio>/<video> + iframe embeds)
 # ---------------------------------------------------------------------------
 
 def _has_caption_track(media_el) -> bool:
@@ -462,6 +553,63 @@ def check_multimedia(soup) -> list:
             },
         })
 
+    findings.extend(check_embedded_media(soup))
+
+    return findings
+
+
+def check_embedded_media(soup) -> list:
+    """Most real-world video/audio isn't a native <video>/<audio> tag --
+    it's a YouTube/Vimeo/SoundCloud/etc. <iframe> embed, which native-tag
+    checks above never see. This is a distinct, common case worth its own
+    check rather than folding into check_multimedia's tag search."""
+    findings = []
+
+    for index, iframe in enumerate(soup.find_all("iframe")):
+        src = (iframe.get("src") or "").lower()
+        if not src:
+            continue
+
+        is_video = any(domain in src for domain in VIDEO_EMBED_DOMAINS)
+        is_audio = any(domain in src for domain in AUDIO_EMBED_DOMAINS)
+        if not is_video and not is_audio:
+            continue
+
+        parent_text = _normalize(iframe.find_parent().get_text(" ", strip=True)) if iframe.find_parent() else ""
+        has_keyword_hint = any(k in parent_text for k in CAPTION_KEYWORDS)
+        title = (iframe.get("title") or "").strip()
+
+        media_kind = "video" if is_video else "audio"
+
+        findings.append({
+            "id": f"NT014-{index}",
+            "title": f"Embedded {media_kind} (iframe) may not have a text equivalent",
+            "type": "warning",
+            "severity": "medium" if not has_keyword_hint else "low",
+            "confidence": "low",
+            "evidence": (
+                f"Iframe #{index + 1} embeds {media_kind} from an external "
+                f"provider ({src[:80]}). Embedded players are opaque to "
+                "this audit -- caption/transcript availability inside the "
+                "player itself cannot be checked from the host page. "
+                + (
+                    "Nearby text loosely suggests a transcript/captions may "
+                    "exist (keyword match only -- verify manually)."
+                    if has_keyword_hint
+                    else "No nearby text suggests a transcript exists."
+                )
+                + (f" Iframe has no descriptive title attribute." if not title else "")
+            ),
+            "suggested_action": {
+                "summary": (
+                    "If this embed conveys important information, provide a "
+                    "transcript/summary as page text near the embed, and add "
+                    "a descriptive iframe title attribute."
+                ),
+                "priority": "medium" if not has_keyword_hint else "low",
+            },
+        })
+
     return findings
 
 
@@ -477,7 +625,7 @@ def audit_non_text(html: str, url: str) -> list:
     # --- PDF links -----------------------------------------------------
     pdf_links = soup.find_all("a", href=lambda h: h and ".pdf" in h.lower())
     for index, link in enumerate(pdf_links):
-        pdf_url = link.get("href")
+        pdf_url = _resolve_url(url, link.get("href"))
         pdf_findings = check_pdf_text_content(pdf_url, index)
         findings.extend(pdf_findings)
 
@@ -519,10 +667,15 @@ def audit_non_text(html: str, url: str) -> list:
             })
 
     # --- Images ----------------------------------------------------------
+    images_ocr_attempted = 0
+
     for index, img in enumerate(soup.find_all("img")):
         alt = img.get("alt")
         parent_link_or_button = img.find_parent(["a", "button"])
         is_functional = parent_link_or_button is not None
+
+        if _is_decorative(img):
+            continue  # legitimately decorative (alt="" or role=presentation/none)
 
         if alt is None:
             if is_functional and not _has_accessible_name(parent_link_or_button):
@@ -567,8 +720,6 @@ def audit_non_text(html: str, url: str) -> list:
                 })
         else:
             alt = alt.strip()
-            if alt == "":
-                continue  # legitimately decorative
             if is_generic_alt(alt):
                 findings.append({
                     "id": f"NT002-{index}",
@@ -586,15 +737,21 @@ def audit_non_text(html: str, url: str) -> list:
                     },
                 })
 
-        # OCR pass (skip if alt is already meaningfully descriptive)
+        # OCR pass (skip if alt is already meaningfully descriptive, if OCR
+        # is unavailable, or if we've hit the per-page runtime budget cap)
         if alt and len(alt.strip()) >= MIN_MEANINGFUL_ALT_LENGTH:
             continue
+        if not OCR_AVAILABLE:
+            continue
+        if images_ocr_attempted >= MAX_IMAGES_TO_OCR:
+            continue
 
-        src = img.get("src")
+        src = _resolve_url(url, img.get("src"))
         if src and src.startswith(("http://", "https://")):
             if src in _image_cache:
                 pil_image = _image_cache[src]
             else:
+                images_ocr_attempted += 1
                 try:
                     resp = _safe_get(src, stream=True)
                     content = resp.raw.read(MAX_DOWNLOAD_BYTES + 1)
@@ -611,10 +768,27 @@ def audit_non_text(html: str, url: str) -> list:
             if pil_image is not None:
                 findings.extend(check_image_text(pil_image, index, visible_page_text))
 
-    # --- Inline SVG / background-images / multimedia ----------------------
+    # --- Inline SVG / background-images / multimedia (native + embedded) --
     findings.extend(check_inline_svg(soup))
     findings.extend(check_background_images(soup))
     findings.extend(check_multimedia(soup))
+
+    if not OCR_AVAILABLE:
+        findings.append({
+            "id": "NT015",
+            "title": "OCR unavailable in this environment",
+            "type": "info",
+            "severity": "low",
+            "confidence": "high",
+            "evidence": (
+                "pytesseract/Pillow or the tesseract binary is not installed. "
+                "Text embedded inside images could not be checked this run."
+            ),
+            "suggested_action": {
+                "summary": "Install tesseract-ocr and pytesseract to enable in-image text detection.",
+                "priority": "low",
+            },
+        })
 
     return findings
 
