@@ -11,6 +11,7 @@ function checkHttpStatus(page) {
         "timeout": "Page timed out during crawling",
         "dns-error": "Domain could not be resolved",
         "connection-error": "Connection to page failed",
+        "http2-error": "HTTP/2 connection failed during crawling",
         "navigation-error": "Page navigation failed"
     };
 
@@ -21,17 +22,24 @@ function checkHttpStatus(page) {
             "Ensure the domain resolves correctly and is reachable by automated crawlers.",
         "connection-error":
             "Ensure the server accepts connections from automated crawlers.",
+        "http2-error":
+            "Verify HTTP/2 compatibility and ensure the server can reliably serve automated crawler requests.",
         "navigation-error":
             "Ensure the page can be reached successfully by automated crawlers."
-    };
-
+        };
+        
     const errorType =
         page.errorType || "navigation-error";
 
     findings.push(
         createFinding({
             type: "crawlability",
-            severity: "high",
+            severity:
+                errorType === "http2-error"
+                    ? "low"
+                    : errorType === "navigation-error"
+                        ? "medium"
+                        : "high",
             url: page.requestedUrl,
             title:
                 errorTitles[errorType] ||

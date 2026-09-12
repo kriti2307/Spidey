@@ -99,7 +99,13 @@ def build_report(site, specialist_findings):
 
     findings = []
 
+    seen_transport_errors = set()
+
     for finding in specialist_findings:
+        if finding.get("title") == "HTTP/2 connection failed during crawling":
+            if "http2-error" in seen_transport_errors:
+                continue
+            seen_transport_errors.add("http2-error")
 
         normalized = normalize_finding(
             finding,

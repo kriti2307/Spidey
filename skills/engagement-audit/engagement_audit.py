@@ -450,6 +450,8 @@ def check2_orientation(entry_pages, home_soup, site_url, findings, unverified):
         return
 
     for url in entry_pages:
+        if "/fragments/" in url:
+            continue
         resp, elapsed, err = fetch(url)
         if resp is None or resp.status_code != 200:
             findings.append(make_finding(

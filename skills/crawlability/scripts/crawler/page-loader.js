@@ -74,6 +74,10 @@ async function loadPage(page, url) {
             error.message.includes("ECONNREFUSED")
         ) {
             result.errorType = "connection-error";
+        } else if (
+            error.message.includes("ERR_HTTP2_PROTOCOL_ERROR")
+        ) {
+            result.errorType = "http2-error";
         } else {
             result.errorType = "navigation-error";
         }
