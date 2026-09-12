@@ -14,6 +14,10 @@ requests / BeautifulSoup / pypdf.
 
 import json
 from datetime import date
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from freshness_extraction import (
     _get_visible_text,

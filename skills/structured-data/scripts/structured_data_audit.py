@@ -376,11 +376,11 @@ def audit_structured_data(html: str, url: str) -> list:
         findings.append({
             "id": "SD001",
             "title": "No structured data detected",
-            "severity": "high",
+            "severity": "low",
             "evidence": "No JSON-LD structured data was found on the page.",
             "suggested_action": {
                 "summary": "Add relevant Schema.org structured data.",
-                "priority": "high",
+                "priority": "low",
             },
         })
         return findings
