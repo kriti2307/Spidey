@@ -98,20 +98,26 @@ def build_report(site, specialist_findings):
     """
 
     findings = []
-
-    seen_transport_errors = set()
+    seen_findings = set()
 
     for finding in specialist_findings:
-        if finding.get("title") == "HTTP/2 connection failed during crawling":
-            if "http2-error" in seen_transport_errors:
-                continue
-            seen_transport_errors.add("http2-error")
 
         normalized = normalize_finding(
             finding,
             f"F-{len(findings) + 1:03d}"
         )
 
+        # Deduplicate identical findings
+        dedupe_key = (
+            normalized["title"],
+            normalized["severity"],
+            normalized["evidence"]
+        )
+
+        if dedupe_key in seen_findings:
+            continue
+
+        seen_findings.add(dedupe_key)
         findings.append(normalized)
 
     summary = {
@@ -138,73 +144,6 @@ def build_report(site, specialist_findings):
 
         "findings": findings
     }
-
-def run_structured_data_audit(crawl_audit):
-    """
-    Run the structured-data specialist against HTML already
-    collected by crawlability.
-    """
-
-    from pathlib import Path
-    import importlib.util
-
-    skills_root = Path(__file__).resolve().parents[2]
-
-    structured_data_path = (
-        skills_root
-        / "structured-data"
-        / "scripts"
-        / "structured_data_audit.py"
-    )
-
-    spec = importlib.util.spec_from_file_location(
-        "structured_data_audit",
-        structured_data_path
-    )
-
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-
-    findings = []
-
-    for page in crawl_audit.get("pages", []):
-
-        html = page.get("html")
-        url = page.get("url")
-
-        if not html or not url:
-            continue
-
-        page_findings = module.audit_structured_data(
-            html,
-            url
-        )
-
-        # The structured-data skill doesn't always include
-        # the page URL in its finding.
-        # The orchestrator knows the URL, so attach it here.
-        for finding in page_findings:
-
-            print(
-                "DEBUG STRUCTURED FINDING:",
-                finding,
-                "PAGE URL:",
-                url,
-                file=sys.stderr
-            )
-
-            if not finding.get("url"):
-                finding["url"] = url
-
-            print(
-                "DEBUG AFTER URL:",
-                finding,
-                file=sys.stderr
-            )
-
-            findings.append(finding)
-
-    return findings
 
 def run_structured_data_audit(crawl_audit):
     """
@@ -360,10 +299,21 @@ def run_non_text_audit(crawl_audit):
     return findings
 
 
-def run_engagement_audit(site_url):
+def run_engagement_audit(site_url, crawl_audit):
     """
-    Run the engagement specialist against the audited site.
+    Run the engagement specialist only when the homepage
+    was successfully crawled.
     """
+
+    homepage = None
+
+    for page in crawl_audit.get("pages", []):
+        if page.get("url") == site_url or page.get("finalUrl") == site_url:
+            homepage = page
+            break
+
+    if not homepage or not homepage.get("success"):
+        return []
 
     from pathlib import Path
     import importlib.util
@@ -471,7 +421,8 @@ def main():
     # Engagement audit findings
     # -----------------------------
     engagement_findings = run_engagement_audit(
-        crawl_audit["site"]
+        crawl_audit["site"],
+        crawl_audit
     )
 
     specialist_findings.extend(engagement_findings)

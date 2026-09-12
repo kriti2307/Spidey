@@ -638,14 +638,14 @@ def check4_mobile(site_url, home_soup, findings):
     viewport = home_soup.find("meta", attrs={"name": "viewport"})
     if not viewport:
         findings.append(make_finding(
-            "issue", "No viewport meta tag", "critical",
+            "issue", "No viewport meta tag", "medium",
             f"{site_url}: no <meta name=\"viewport\"> tag found in <head>.",
             "Add a responsive viewport meta tag.",
             ['Add <meta name="viewport" content="width=device-width, initial-scale=1"> '
              "to the <head>.",
              "Verify it's present in the server-rendered HTML, not only injected by JS.",
              "Re-check rendering on a real mobile viewport after adding it."],
-            "critical",
+            "medium",
         ))
     else:
         content = viewport.get("content", "")
