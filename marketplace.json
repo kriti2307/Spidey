@@ -1,0 +1,32 @@
+{
+  "name": "Spidey Agent Skill Marketplace",
+  "version": "1.0.0",
+  "description": "Website auditing skills for AI discoverability and on-site engagement.",
+  "entrypoint": "audit-orchestrator",
+  "skills": [
+    {
+      "name": "audit-orchestrator",
+      "path": "skills/audit-orchestrator"
+    },
+    {
+      "name": "crawlability",
+      "path": "skills/crawlability"
+    },
+    {
+      "name": "engagement-audit",
+      "path": "skills/engagement-audit"
+    },
+    {
+      "name": "freshness",
+      "path": "skills/freshness"
+    },
+    {
+      "name": "non-text",
+      "path": "skills/non-text"
+    },
+    {
+      "name": "structured-data",
+      "path": "skills/structured-data"
+    }
+  ]
+}

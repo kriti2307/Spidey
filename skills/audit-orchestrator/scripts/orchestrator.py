@@ -390,13 +390,21 @@ def run_engagement_audit(site_url):
 
 
 def main():
-
     import subprocess
     import os
 
+    if len(sys.argv) < 2:
+        print(
+            "Usage: python orchestrator.py <url>",
+            file=sys.stderr
+        )
+        sys.exit(1)
+
+    site_url = sys.argv[1]
+
     crawler_path = os.path.join(
         os.path.dirname(__file__),
-        "../../crawlability/scripts/test/run-crawler-test.js"
+        "../../crawlability/scripts/crawler/crawler.js"
     )
 
     crawler_path = os.path.abspath(crawler_path)
@@ -407,7 +415,9 @@ def main():
     result = subprocess.run(
         [
             "node",
-            crawler_path
+            crawler_path,
+            site_url,
+            "20"
         ],
         capture_output=True,
         text=True,

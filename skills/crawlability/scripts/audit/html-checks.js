@@ -222,29 +222,6 @@ function runHtmlChecks(page) {
         );
     }
 
-    // 6. Images without alt text
-    const imagesWithoutAlt = data.images.filter(
-        image =>
-            !image.hasAlt &&
-            image.role !== "presentation" &&
-            !image.ariaHidden
-    );
-
-    if (imagesWithoutAlt.length > 0) {
-        findings.push(
-            createFinding({
-                type: "html-extraction",
-                severity: "low",
-                url: page.requestedUrl,
-                title: "Images are missing alternative text",
-                evidence: [
-                    `${imagesWithoutAlt.length} image(s) are missing an alt attribute.`
-                ],
-                recommendation:
-                    "Add alt text to informative images. Decorative images should use alt=\"\"."
-            })
-        );
-    }
 
     return findings;
 }

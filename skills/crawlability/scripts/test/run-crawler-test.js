@@ -1,4 +1,4 @@
-const { crawlWebsite } = require("./crawler");
+const { crawlWebsite } = require("../crawler/crawler");
 
 async function main() {
     const audit = await crawlWebsite(

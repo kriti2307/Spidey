@@ -338,7 +338,7 @@ def check1_findability(site_url, findings, unverified, rp):
 
     if not nav_links:
         findings.append(make_finding(
-            "issue", "No primary navigation menu detected", "critical",
+            "warning", "No primary navigation menu detected", "medium",
             f"{site_url}: no <nav>, [role=navigation], or common nav-class container "
             f"with anchor links was found in the fetched HTML.",
             "Add a top-level navigation menu with links to the site's main offerings/categories.",
@@ -348,7 +348,7 @@ def check1_findability(site_url, findings, unverified, rp):
              "inside that landmark.",
              "Avoid nav rendered purely via client-side JS with no server-rendered fallback, "
              "since this skill (and many crawlers) only see static HTML."],
-            "critical",
+            "medium",
         ))
     else:
         unmatched = []

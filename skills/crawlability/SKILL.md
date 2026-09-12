@@ -1,147 +1,259 @@
 ---
 name: crawlability
-description: Audits website crawlability and machine-readable HTML by crawling reachable pages, respecting robots.txt, detecting crawl failures and redirect issues, comparing raw HTML with JavaScript-rendered content, and extracting important page-level HTML signals.
+description: Audit website crawlability, JavaScript rendering, and HTML discoverability. Use this skill when a website needs to be checked for crawlable pages, HTTP errors, robots.txt restrictions, redirects, sitemap-discovered URLs, JavaScript-dependent content, and important HTML metadata or extracted content.
 ---
 
 # Crawlability Audit Skill
 
 ## Purpose
 
-Use this skill to audit whether website pages can be reached and meaningfully understood by automated crawlers and AI systems.
+Audit a website to determine whether important content and pages are
+accessible to crawlers and exposed in usable HTML.
 
-The skill performs read-only analysis. It must not modify the target website.
+This skill covers three areas:
 
-## When to use
+1. Crawlability
+2. JavaScript rendering
+3. HTML extraction
 
-Use this skill when the user asks to audit a website for:
+The skill is read-only. It must not modify the audited website.
 
-- crawlability
-- crawler access problems
-- HTTP errors
-- redirect problems
-- robots.txt restrictions
-- sitemap discovery
-- JavaScript-rendered content
-- important content missing from raw HTML
-- page-level HTML extraction issues
-- missing or duplicate title elements
-- missing or duplicate meta descriptions
-- canonical URL problems
-- missing primary headings
-- very little visible text
-- hidden page content
-- missing image alternative text
+## Input
 
-## Audit workflow
+Accept a website URL.
 
-1. Start from the supplied website URL.
-2. Respect the site's `robots.txt` rules for the crawler user-agent.
-3. Respect any crawl delay specified by `robots.txt`.
-4. Discover sitemap URLs when available.
-5. Crawl reachable same-origin HTML pages.
-6. Normalize URLs to avoid duplicate crawling caused by fragments and common tracking parameters.
-7. Record HTTP status, final URL, redirects, and navigation failures.
-8. Compare raw HTML content with JavaScript-rendered content.
-9. Extract page-level HTML information from the rendered page.
-10. Run the crawlability, rendering, and HTML checks.
-11. Return findings with evidence, severity, and recommended actions.
+Example:
 
-## Findings
+`https://example.com`
 
-Each finding should contain:
+Normalize the URL before crawling.
 
-- `type`
-- `severity`
-- `url`
-- `title`
-- `evidence`
-- `recommendation`
+## Workflow
 
-Severity levels:
+### Step 1: Crawl the website
 
-- `high` — likely prevents or significantly harms crawling or access
-- `medium` — important issue that may reduce machine understanding or discoverability
-- `low` — smaller issue or quality improvement
+Use the crawler implementation:
 
-Do not report an issue unless there is concrete evidence from the audited page.
+`scripts/crawler`
 
-## JavaScript rendering
+The crawler must:
 
-Compare the page before and after JavaScript rendering.
+- respect robots.txt
+- respect crawl-delay when provided
+- stay within the target origin
+- avoid non-HTML resources unless explicitly required
+- follow internal links
+- process sitemap URLs when available
+- enforce crawl limits
+- rate-limit requests
+- record HTTP status codes
+- record redirects
+- record failed requests
 
-Look for meaningful content that appears only after rendering, including:
+Do not bypass robots.txt restrictions.
 
-- text
+### Step 2: Detect JavaScript rendering gaps
+
+Use:
+
+`scripts/renderer/render-gap.js`
+
+Compare the initial HTML response with the rendered page.
+
+Look for important content that appears only after JavaScript execution, including:
+
+- visible text
 - headings
 - links
 
-Do not treat small changes or obvious hidden/UI-only content as evidence that important content requires JavaScript.
+Flag a rendering issue when meaningful content is added only after
+rendering.
 
-## HTML extraction
+Do not flag small or insignificant DOM differences as a problem.
 
-Extract and analyze:
+### Step 3: Extract HTML information
+
+Use:
+
+`scripts/extractor/html-extractor.js`
+
+Extract information needed for the audit, including:
 
 - page title
-- title element count
 - meta description
-- meta description count
 - canonical URL
 - headings
 - visible text
-- visible word count
-- main content text
-- hidden content
+- hidden text
 - semantic HTML elements
-- links
-- images and alternative-text information
+- internal and external links
+- images and alternative-text metadata
 
-## Current checks
+Prefer extracted evidence over assumptions.
 
-The skill currently checks for:
+### Step 4: Run HTML checks
 
-### Crawlability
+Use:
 
-- crawler/network failures
-- HTTP error responses
-- long redirect chains
-- unexpected redirect destinations
-- robots.txt blocking
+`scripts/audit/html-checks.js`
 
-### HTML
+Check for meaningful HTML-level issues such as:
 
-- missing title
+- missing page title
 - multiple title elements
-- missing H1 when the page has substantial content and other headings
+- missing primary heading on substantial pages
 - missing canonical URL
-- canonical URL pointing to another page
-- invalid canonical URL
+- invalid or conflicting canonical URL
 - missing meta description
 - multiple meta descriptions
-- very little visible text
+- extremely small visible text
 - substantial hidden content
-- images missing alternative text
 
-### JavaScript rendering
+Only report an issue when the evidence supports it.
 
-- significant text added after rendering
+### Step 5: Produce findings
+
+Each detected issue must contain:
+
+- title
+- severity
+- evidence
+- suggested action
+
+Evidence must identify the affected URL whenever possible.
+
+Severity levels:
+
+- `critical`
+- `high`
+- `medium`
+- `low`
+
+Use `critical` only for issues that can seriously prevent users or
+crawlers from accessing important site functionality.
+
+Use `high` for significant discoverability or rendering problems.
+
+Use `medium` for meaningful but less severe problems.
+
+Use `low` for minor issues or limited improvements.
+
+Do not create findings merely because something could theoretically be
+improved.
+
+## JavaScript-specific guidance
+
+A page should be considered problematic when important information is
+missing from the initial HTML but appears after JavaScript execution.
+
+Strong evidence includes:
+
+- substantial text added after rendering
 - headings added after rendering
-- links added after rendering
+- important internal links added after rendering
 
-## Guardrails
+Example finding:
 
-- Read-only analysis only.
-- Never modify, submit, delete, or authenticate to the target website.
-- Do not bypass robots.txt restrictions.
-- Do not intentionally overload a website with requests.
-- Prefer same-origin URLs discovered from the supplied website.
-- Avoid crawling non-HTML resources such as images, videos, stylesheets, scripts, and downloadable files.
-- Use evidence from the actual page rather than assumptions.
-- Avoid duplicate findings when the same underlying problem is already represented by a more specific finding.
+Title:
+`Important page content depends on JavaScript`
+
+Evidence:
+`191 additional characters appeared after rendering; 2 additional
+headings and 3 additional links appeared after rendering.`
+
+Suggested action:
+`Ensure important content is available in the initial HTML response or
+provide reliable server-side rendering.`
+
+## Crawlability-specific guidance
+
+Report:
+
+- HTTP 4xx/5xx responses for discovered important pages
+- failed requests
+- problematic redirects
+- robots.txt restrictions affecting crawlable content
+- sitemap discovery failures when they materially affect discovery
+
+Do not report a robots.txt-blocked URL as a broken page merely because
+the crawler could not fetch it.
+
+Do not crawl outside the target origin.
+
+## HTML extraction guidance
+
+Extract content from the rendered page when rendering is required, but
+retain the initial HTML response for comparison.
+
+Use visible content as the primary basis for content-related findings.
+
+Do not treat:
+
+- scripts
+- styles
+- templates
+- clearly hidden elements
+
+as visible page content.
 
 ## Output
 
-Return findings in a structured format suitable for the marketplace orchestrator.
+Return structured findings to the orchestrator.
 
-For each finding, include the affected URL, severity, concrete evidence, and a prioritized recommendation.
+The orchestrator will convert findings into the final marketplace report.
 
-If no issue is detected for a check, do not create a finding.
+Do not generate a separate report format inside this skill.
+
+## Safety and scope
+
+This skill is strictly read-only.
+
+Never:
+
+- submit forms
+- log into accounts
+- change website content
+- delete resources
+- publish content
+- modify configuration
+- bypass robots.txt
+- intentionally overload a website
+
+Keep crawling within reasonable limits and use rate limiting.
+
+## Implementation
+
+The crawler implementation is organized under:
+
+`scripts/crawler/`
+
+The rendering detector is:
+
+`scripts/renderer/render-gap.js`
+
+The HTML extractor is:
+
+`scripts/extractor/html-extractor.js`
+
+The audit checks are:
+
+`scripts/audit/`
+
+Development and integration tests are kept under:
+
+`scripts/test/`
+
+The crawler combines:
+
+- URL normalization
+- robots.txt handling
+- sitemap discovery
+- page loading
+- rate limiting
+- JavaScript render-gap detection
+- HTML extraction
+- crawl checks
+- HTML checks
+
+The implementation should remain modular so individual components can
+be tested independently.

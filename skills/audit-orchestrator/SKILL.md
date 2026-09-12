@@ -59,18 +59,29 @@ When specialist skills return conflicting results, prefer findings supported by 
 
 ## Finding normalization
 
-Normalize specialist findings into the following structure:
+Normalize specialist findings into the final Adobe report structure:
 
 {
-  "type": "...",
-  "severity": "high|medium|low",
-  "url": "...",
+  "id": "F-001",
   "title": "...",
-  "evidence": [],
-  "recommendation": "..."
+  "severity": "critical|high|medium|low",
+  "evidence": "...",
+  "suggested_action": {
+    "summary": "...",
+    "priority": "critical|high|medium|low"
+  }
 }
 
-Avoid reporting the same issue multiple times when multiple specialist skills identify the same underlying problem.
+Assign sequential finding IDs such as `F-001`, `F-002`, and `F-003`.
+
+Convert evidence into a concise string while preserving the affected URL
+and concrete observations.
+
+Convert specialist recommendations into `suggested_action.summary`
+and `suggested_action.priority`.
+
+Avoid reporting the same underlying problem multiple times when
+specialist skills overlap.
 
 ## Prioritization
 
@@ -84,16 +95,35 @@ Recommendations should be specific, actionable, and directly connected to the ev
 
 ## Final report
 
-Return a unified report containing:
+Return one unified report in this structure:
 
-- audit summary
-- pages analyzed
-- high-priority findings
-- medium-priority findings
-- low-priority findings
-- prioritized recommended actions
+{
+  "site": "...",
+  "audited_at": "...",
+  "summary": {
+    "total_findings": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": []
+}
 
-Each finding should identify the affected URL and provide concrete evidence.
+Each finding must contain:
+
+- `id`
+- `title`
+- `severity`
+- `evidence`
+- `suggested_action`
+
+`suggested_action` must contain:
+
+- `summary`
+- `priority`
+
+Every finding should identify the affected URL in its evidence.
 
 If no issue is detected, do not create a finding.
 
