@@ -1,5 +1,5 @@
 const { chromium } = require("playwright");
-const { extractPageData } = require("./src/extractor/html-extractor");
+const { extractPageData } = require("../extractor/html-extractor");
 
 async function main() {
     const browser = await chromium.launch({ headless: true });
