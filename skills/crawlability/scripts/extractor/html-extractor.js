@@ -20,7 +20,14 @@ function extractPageData(page, startUrl) {
 
         const title = clean(document.title);
 
-        const titleCount = document.querySelectorAll("title").length;
+        // Scoped to <head> deliberately - a document-wide selector also
+        // matches <title> elements inside inline <svg> blocks (SVGs
+        // legitimately use their own <title> for accessibility labeling),
+        // which inflated this count to 15-46 on real pages instead of the
+        // real 0-or-1 count of actual page-title elements.
+        const titleCount = document.head
+            ? document.head.querySelectorAll("title").length
+            : document.querySelectorAll("title").length;
 
 
         // -----------------------------

@@ -138,9 +138,17 @@ function runHtmlChecks(page) {
                     })
                 );
             } else if (
-                canonicalUrl.pathname !== pageUrl.pathname ||
-                canonicalUrl.search !== pageUrl.search
+                canonicalUrl.pathname !== pageUrl.pathname
             ) {
+                // NOTE: deliberately only compares pathname, not search/query
+                // string. A canonical differing only by query params (e.g.
+                // "?p=1" on a paginated listing pointing back to page 1) is
+                // standard, correct SEO practice, not a defect - comparing
+                // .search here caused a large share of false positives
+                // (15 of 16 findings on one real audit) by flagging routine
+                // pagination canonicalization as if it were a broken/wrong
+                // canonical. A genuinely different destination page (a real
+                // path mismatch) is still caught.
                 findings.push(
                     createFinding({
                         type: "html-extraction",
