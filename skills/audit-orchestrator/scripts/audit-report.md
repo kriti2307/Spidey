@@ -1,28 +1,60 @@
 # Brand AI-Readiness Audit
 
 **Site:** `https://www.aciffs.in`
-**Audited at:** `2026-09-13T05:12:47Z`
+**Audited at:** `2026-09-13T05:44:37Z`
 
 ---
 
 ## Summary
 
-**Total findings:** 24
+**Total findings:** 29
 
 🔴 Critical: **0**  
-🟠 High: **0**  
-🟡 Medium: **18**  
+🟠 High: **6**  
+🟡 Medium: **17**  
 🟢 Low: **6**
 
 ## Top Priorities
 
-1. 🟡 **Structured data value not found in visible content: name** — `Medium` (6 affected)
-2. 🟡 **Image may contain information that is not available as text** — `Medium` (5 affected)
-3. 🟡 **Page lacks a primary heading** — `Medium` (4 affected)
+1. 🟠 **Important page content depends on JavaScript** — `High` (6 affected)
+2. 🟡 **Structured data value not found in visible content: name** — `Medium` (6 affected)
+3. 🟡 **Image may contain information that is not available as text** — `Medium` (5 affected)
 
 ## Findings
 
-### 1. 🟡 Structured data value not found in visible content: name
+### 1. 🟠 Important page content depends on JavaScript
+
+**Type:** `Issue`
+**Severity:** `High`
+**Affected pages/resources:** 6
+
+#### Where it was found
+
+- `https://www.aciffs.in/`
+- `https://www.aciffs.in/about-us`
+- `https://www.aciffs.in/publication`
+- `https://www.aciffs.in/speakers`
+- `https://www.aciffs.in/call-for-papers`
+- `https://www.aciffs.in/for-authors/guidelines`
+
+#### Evidence
+
+> https://www.aciffs.in/ — 3436 additional characters appeared after rendering 24 additional headings appeared after rendering 20 additional links appeared after rendering
+> https://www.aciffs.in/about-us — 5160 additional characters appeared after rendering 9 additional headings appeared after rendering 14 additional links appeared after rendering
+> https://www.aciffs.in/publication — 1131 additional characters appeared after rendering 4 additional headings appeared after rendering 14 additional links appeared after rendering
+> https://www.aciffs.in/speakers — 1792 additional characters appeared after rendering 4 additional headings appeared after rendering 34 additional links appeared after rendering
+> https://www.aciffs.in/call-for-papers — 709 additional characters appeared after rendering 5 additional headings appeared after rendering 14 additional links appeared after rendering
+> https://www.aciffs.in/for-authors/guidelines — 2064 additional characters appeared after rendering 5 additional headings appeared after rendering 17 additional links appeared after rendering
+
+#### Suggested Action
+
+Ensure important content is available in the initial HTML response or provide reliable server-side rendering.
+
+**Priority:** `High`
+
+---
+
+### 2. 🟡 Structured data value not found in visible content: name
 
 **Type:** `Issue`
 **Severity:** `Medium`
@@ -54,7 +86,7 @@ Verify that the structured-data 'name' value matches the visible page content.
 
 ---
 
-### 2. 🟡 Image may contain information that is not available as text
+### 3. 🟡 Image may contain information that is not available as text
 
 **Type:** `Issue`
 **Severity:** `Medium`
@@ -80,7 +112,7 @@ Provide a meaningful text alternative when the image conveys important informati
 
 ---
 
-### 3. 🟡 Page lacks a primary heading
+### 4. 🟡 Page lacks a primary heading
 
 **Type:** `Issue`
 **Severity:** `Medium`
@@ -108,7 +140,7 @@ Add a clear primary heading that identifies the page's main topic.
 
 ---
 
-### 4. 🟡 Video may not have captions or a text equivalent
+### 5. 🟡 Video may not have captions or a text equivalent
 
 **Type:** `Warning`
 **Severity:** `Medium`
@@ -126,31 +158,6 @@ Add a clear primary heading that identifies the page's main topic.
 #### Suggested Action
 
 Provide captions or a transcript when the video conveys important information.
-
-**Priority:** `Medium`
-
----
-
-### 5. 🟡 Page navigation failed
-
-**Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 1
-
-#### Where it was found
-
-- `https://www.aciffs.in/assets/ACIFFS-2026%20abstract_template.docx`
-
-#### Evidence
-
-> https://www.aciffs.in/assets/ACIFFS-2026%20abstract_template.docx — Error type: navigation-error page.goto: Download is starting
-Call log:
-[2m  - navigating to "https://www.aciffs.in/assets/ACIFFS-2026%20abstract_template.docx", waiting until "domcontentloaded"[22m
-
-
-#### Suggested Action
-
-Ensure the page can be reached successfully by automated crawlers.
 
 **Priority:** `Medium`
 
