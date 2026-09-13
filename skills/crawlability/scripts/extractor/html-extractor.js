@@ -76,7 +76,7 @@ function extractPageData(page, startUrl) {
 
         const hiddenElements = Array.from(
             document.querySelectorAll(
-                "[hidden], [aria-hidden='true'], [style*='display:none'], [style*='visibility:hidden']"
+                "[hidden], [style*='display:none'], [style*='visibility:hidden']"
             )
         );
 

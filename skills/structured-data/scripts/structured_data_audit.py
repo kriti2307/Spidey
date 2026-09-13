@@ -93,31 +93,31 @@ def check_schema_type(visible_text, data, index):
     page_type_signals = {
         "restaurant": [
             "restaurant",
-            "menu",
             "book a table",
             "reserve a table",
+            "restaurant menu",
             "cuisine",
         ],
         "hotel": [
             "hotel",
+            "hotel booking",
             "check-in",
             "check-out",
-            "rooms",
-            "hotel booking",
+            "hotel rooms",
         ],
         "event": [
-            "event",
-            "conference",
-            "register",
-            "venue",
-            "date and time",
+            "event registration",
+            "conference registration",
+            "event date",
+            "event venue",
+            "register for the event",
         ],
         "product": [
             "add to cart",
             "buy now",
-            "product",
-            "price",
+            "product page",
             "in stock",
+            "product price",
         ],
     }
 
