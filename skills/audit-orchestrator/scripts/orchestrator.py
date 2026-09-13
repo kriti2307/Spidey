@@ -134,8 +134,11 @@ def build_report(site, specialist_findings):
             f"F-{len(findings) + 1:03d}"
         )
         
-        # Deduplicate identical findings
+        # Deduplicate identical findings on the same page only.
+        # URL must be part of the key so the same finding on different
+        # pages is never silently collapsed into a single entry.
         dedupe_key = (
+            finding.get("url", ""),
             finding.get("title", ""),
             finding.get("severity", "medium"),
             normalize_evidence(finding.get("evidence"))
