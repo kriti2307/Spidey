@@ -96,7 +96,7 @@ async function parseSitemap(sitemapUrl, visited = new Set()) {
             return results;
         }
     } catch (error) {
-        console.log("Invalid sitemap:", sitemapUrl);
+        console.error("Invalid sitemap:", sitemapUrl);
     }
 
     return [];
