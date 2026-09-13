@@ -201,7 +201,7 @@ def _is_decorative(img) -> bool:
     return False
 
 
-def _nearby_caption_context(img) -> str | None:
+def _nearby_caption_context(img):
     """
     Returns a short note if the image has plausible surrounding context
     (figcaption or aria-describedby) that may reduce the real-world

@@ -45,9 +45,14 @@ async function loadPage(page, url) {
             waitUntil: "domcontentloaded",
             timeout: 30000
         });
-
         if (response) {
             result.status = response.status();
+
+            try {
+                result.rawHtml = await response.text();
+            } catch {
+                result.rawHtml = null;
+            }
         }
 
         result.finalUrl = page.url();

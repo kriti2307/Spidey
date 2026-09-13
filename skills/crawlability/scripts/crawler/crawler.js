@@ -154,7 +154,8 @@ const crawlDelay = getCrawlDelay(robots);
             try {
                 renderGap = await detectRenderGap(
                     page,
-                    currentUrl
+                    currentUrl,
+                    result.rawHtml
                 );
             } catch (error) {
                 renderGap = {
