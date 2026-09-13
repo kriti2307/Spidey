@@ -1,24 +1,24 @@
 # Brand AI-Readiness Audit
 
 **Site:** `https://www.nike.in/`
-**Audited at:** `2026-09-13T18:01:52Z`
+**Audited at:** `2026-09-13T18:06:21Z`
 
 ---
 
 ## Summary
 
-**Total findings:** 107
+**Total findings:** 10
 
 🔴 Critical: **1**  
 🟠 High: **0**  
-🟡 Medium: **81**  
-🟢 Low: **25**
+🟡 Medium: **5**  
+🟢 Low: **4**
 
 ## Top Priorities
 
 1. 🔴 **Homepage-highlighted offerings missing from navigation** — `Critical` (1 affected)
-2. 🟡 **Image may contain information that is not available as text** — `Medium` (40 affected)
-3. 🟡 **Important content appears after JavaScript rendering** — `Medium` (19 affected)
+2. 🟡 **Important content appears after JavaScript rendering** — `Medium` (1 affected)
+3. 🟡 **Canonical URL points to a different page** — `Medium` (1 affected)
 
 ## Findings
 
@@ -50,135 +50,19 @@ Add navigation paths for important homepage-highlighted offerings.
 
 ---
 
-### 2. 🟡 Image may contain information that is not available as text
+### 2. 🟡 Important content appears after JavaScript rendering
 
 **Type:** `Issue`
 **Severity:** `Medium`
-**Affected pages/resources:** 20
-
-#### Where it was found
-
-- `https://www.nike.in/`
-- `https://www.nike.in/new-arrivals/c/94475`
-- `https://www.nike.in/best-sellers/c/94167`
-- `https://www.nike.in/top-picks-under-4999/c/94477`
-- `https://www.nike.in/just-do-the-work/c/94478`
-- `https://www.nike.in/retro-running/c/94175`
-- `https://www.nike.in/acg/c/111979`
-- `https://www.nike.in/air-force-1/c/94020`
-- `https://www.nike.in/air-jordan-1/c/94019`
-- `https://www.nike.in/air-max/c/94031`
-- `https://www.nike.in/dunk/c/94027`
-- `https://www.nike.in/nike-pegasus-shoes/c/99874`
-- `https://www.nike.in/nike-vomero-shoes/c/99877`
-- `https://www.nike.in/lp/running-desktop`
-- `https://www.nike.in/lp/training-desktop`
-- `https://www.nike.in/lp/sportswear-desktop`
-- `https://www.nike.in/nike-football/c/94823`
-- `https://www.nike.in/nike-basketball/c/94822`
-- `https://www.nike.in/shop-all-sale/c/99440`
-- `https://www.nike.in/all-condition-gear/c/94468`
-
-#### Evidence
-
-> https://www.nike.in/ — Image #37 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/ — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/new-arrivals/c/94475 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/new-arrivals/c/94475 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/best-sellers/c/94167 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/best-sellers/c/94167 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/top-picks-under-4999/c/94477 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/top-picks-under-4999/c/94477 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/just-do-the-work/c/94478 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/just-do-the-work/c/94478 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/retro-running/c/94175 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/retro-running/c/94175 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/acg/c/111979 — Image #29 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/acg/c/111979 — Image #30 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-force-1/c/94020 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-force-1/c/94020 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-jordan-1/c/94019 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-jordan-1/c/94019 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-max/c/94031 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/air-max/c/94031 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/dunk/c/94027 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/dunk/c/94027 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-pegasus-shoes/c/99874 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-pegasus-shoes/c/99874 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-vomero-shoes/c/99877 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-vomero-shoes/c/99877 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/running-desktop — Image #20 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/running-desktop — Image #21 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/training-desktop — Image #9 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/training-desktop — Image #10 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/sportswear-desktop — Image #14 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/lp/sportswear-desktop — Image #15 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-football/c/94823 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-football/c/94823 — Image #41 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-basketball/c/94822 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/nike-basketball/c/94822 — Image #41 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/shop-all-sale/c/99440 — Image #39 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/shop-all-sale/c/99440 — Image #40 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/all-condition-gear/c/94468 — Image #23 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.nike.in/all-condition-gear/c/94468 — Image #24 has no alt text. If it conveys meaningful information, that information may not be available as text.
-
-#### Suggested Action
-
-Provide a meaningful text alternative when the image conveys important information.
-
-**Priority:** `Medium`
-
----
-
-### 3. 🟡 Important content appears after JavaScript rendering
-
-**Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 19
+**Affected pages/resources:** 1
 
 #### Where it was found
 
 - `https://www.nike.in/new-arrivals/c/94475`
-- `https://www.nike.in/best-sellers/c/94167`
-- `https://www.nike.in/top-picks-under-4999/c/94477`
-- `https://www.nike.in/just-do-the-work/c/94478`
-- `https://www.nike.in/retro-running/c/94175`
-- `https://www.nike.in/acg/c/111979`
-- `https://www.nike.in/air-force-1/c/94020`
-- `https://www.nike.in/air-jordan-1/c/94019`
-- `https://www.nike.in/air-max/c/94031`
-- `https://www.nike.in/dunk/c/94027`
-- `https://www.nike.in/nike-pegasus-shoes/c/99874`
-- `https://www.nike.in/nike-vomero-shoes/c/99877`
-- `https://www.nike.in/lp/running-desktop`
-- `https://www.nike.in/lp/training-desktop`
-- `https://www.nike.in/lp/sportswear-desktop`
-- `https://www.nike.in/nike-football/c/94823`
-- `https://www.nike.in/nike-basketball/c/94822`
-- `https://www.nike.in/shop-all-sale/c/99440`
-- `https://www.nike.in/all-condition-gear/c/94468`
 
 #### Evidence
 
 > https://www.nike.in/new-arrivals/c/94475 — 587 additional characters appeared after rendering
-> https://www.nike.in/best-sellers/c/94167 — 581 additional characters appeared after rendering
-> https://www.nike.in/top-picks-under-4999/c/94477 — 596 additional characters appeared after rendering
-> https://www.nike.in/just-do-the-work/c/94478 — 559 additional characters appeared after rendering
-> https://www.nike.in/retro-running/c/94175 — 498 additional characters appeared after rendering
-> https://www.nike.in/acg/c/111979 — 468 additional characters appeared after rendering
-> https://www.nike.in/air-force-1/c/94020 — 464 additional characters appeared after rendering
-> https://www.nike.in/air-jordan-1/c/94019 — 452 additional characters appeared after rendering
-> https://www.nike.in/air-max/c/94031 — 495 additional characters appeared after rendering
-> https://www.nike.in/dunk/c/94027 — 450 additional characters appeared after rendering
-> https://www.nike.in/nike-pegasus-shoes/c/99874 — 478 additional characters appeared after rendering
-> https://www.nike.in/nike-vomero-shoes/c/99877 — 500 additional characters appeared after rendering
-> https://www.nike.in/lp/running-desktop — 209 additional characters appeared after rendering
-> https://www.nike.in/lp/training-desktop — 283 additional characters appeared after rendering
-> https://www.nike.in/lp/sportswear-desktop — 202 additional characters appeared after rendering
-> https://www.nike.in/nike-football/c/94823 — 567 additional characters appeared after rendering
-> https://www.nike.in/nike-basketball/c/94822 — 593 additional characters appeared after rendering
-> https://www.nike.in/shop-all-sale/c/99440 — 671 additional characters appeared after rendering
-> https://www.nike.in/all-condition-gear/c/94468 — 447 additional characters appeared after rendering
 
 #### Suggested Action
 
@@ -188,65 +72,7 @@ Ensure important page content is available in the initial HTML response rather t
 
 ---
 
-### 4. 🟡 Inline SVG graphic has no accessible text equivalent
-
-**Type:** `Warning`
-**Severity:** `Medium`
-**Affected pages/resources:** 19
-
-#### Where it was found
-
-- `https://www.nike.in/`
-- `https://www.nike.in/new-arrivals/c/94475`
-- `https://www.nike.in/best-sellers/c/94167`
-- `https://www.nike.in/top-picks-under-4999/c/94477`
-- `https://www.nike.in/just-do-the-work/c/94478`
-- `https://www.nike.in/retro-running/c/94175`
-- `https://www.nike.in/acg/c/111979`
-- `https://www.nike.in/air-force-1/c/94020`
-- `https://www.nike.in/air-jordan-1/c/94019`
-- `https://www.nike.in/air-max/c/94031`
-- `https://www.nike.in/dunk/c/94027`
-- `https://www.nike.in/nike-pegasus-shoes/c/99874`
-- `https://www.nike.in/nike-vomero-shoes/c/99877`
-- `https://www.nike.in/lp/running-desktop`
-- `https://www.nike.in/lp/training-desktop`
-- `https://www.nike.in/nike-football/c/94823`
-- `https://www.nike.in/nike-basketball/c/94822`
-- `https://www.nike.in/shop-all-sale/c/99440`
-- `https://www.nike.in/all-condition-gear/c/94468`
-
-#### Evidence
-
-> https://www.nike.in/ — Inline <svg> #8 has 2 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/new-arrivals/c/94475 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/best-sellers/c/94167 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/top-picks-under-4999/c/94477 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/just-do-the-work/c/94478 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/retro-running/c/94175 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/acg/c/111979 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/air-force-1/c/94020 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/air-jordan-1/c/94019 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/air-max/c/94031 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/dunk/c/94027 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/nike-pegasus-shoes/c/99874 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/nike-vomero-shoes/c/99877 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/lp/running-desktop — Inline <svg> #6 has 2 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/lp/training-desktop — Inline <svg> #8 has 2 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/nike-football/c/94823 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/nike-basketball/c/94822 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/shop-all-sale/c/99440 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-> https://www.nike.in/all-condition-gear/c/94468 — Inline <svg> #4 has 4 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
-
-#### Suggested Action
-
-Add a <title> or aria-label describing the SVG's content.
-
-**Priority:** `Low`
-
----
-
-### 5. 🟡 Canonical URL points to a different page
+### 3. 🟡 Canonical URL points to a different page
 
 **Type:** `Issue`
 **Severity:** `Medium`
@@ -263,6 +89,50 @@ Add a <title> or aria-label describing the SVG's content.
 #### Suggested Action
 
 Set the canonical URL to the preferred version of this page.
+
+**Priority:** `Medium`
+
+---
+
+### 4. 🟡 Inline SVG graphic has no accessible text equivalent
+
+**Type:** `Warning`
+**Severity:** `Medium`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.nike.in/`
+
+#### Evidence
+
+> https://www.nike.in/ — Inline <svg> #8 has 2 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
+
+#### Suggested Action
+
+Add a <title> or aria-label describing the SVG's content.
+
+**Priority:** `Low`
+
+---
+
+### 5. 🟡 Image may contain information that is not available as text
+
+**Type:** `Issue`
+**Severity:** `Medium`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.nike.in/new-arrivals/c/94475`
+
+#### Evidence
+
+> https://www.nike.in/new-arrivals/c/94475 — Image #38 has no alt text. If it conveys meaningful information, that information may not be available as text.
+
+#### Suggested Action
+
+Provide a meaningful text alternative when the image conveys important information.
 
 **Priority:** `Medium`
 
@@ -296,144 +166,7 @@ Replace fixed pixel widths with responsive layout rules.
 
 ---
 
-### 7. 🟡 Slow or heavy initial page load
-
-**Type:** `Warning`
-**Severity:** `Medium`
-**Affected pages/resources:** 1
-
-#### Where it was found
-
-- `https://www.nike.in/`
-
-#### Evidence
-
-> https://www.nike.in/ — https://www.nike.in/: response time not measured from the existing crawl artifact, HTML payload 675KB, 11 synchronous script/stylesheet tag(s) in <head>.
-
-#### Suggested Action
-
-Reduce initial response and render-blocking work.
-
-**Steps:**
-
-- Defer non-critical scripts.
-- Reduce render-blocking CSS.
-- Compress and appropriately size initial assets.
-- Use server caching/CDN delivery where appropriate.
-
-**Priority:** `Medium`
-
----
-
-### 8. 🟢 Page has no meta description
-
-**Type:** `Issue`
-**Severity:** `Low`
-**Affected pages/resources:** 16
-
-#### Where it was found
-
-- `https://www.nike.in/new-arrivals/c/94475`
-- `https://www.nike.in/best-sellers/c/94167`
-- `https://www.nike.in/top-picks-under-4999/c/94477`
-- `https://www.nike.in/just-do-the-work/c/94478`
-- `https://www.nike.in/retro-running/c/94175`
-- `https://www.nike.in/acg/c/111979`
-- `https://www.nike.in/air-force-1/c/94020`
-- `https://www.nike.in/air-jordan-1/c/94019`
-- `https://www.nike.in/air-max/c/94031`
-- `https://www.nike.in/dunk/c/94027`
-- `https://www.nike.in/nike-pegasus-shoes/c/99874`
-- `https://www.nike.in/nike-vomero-shoes/c/99877`
-- `https://www.nike.in/nike-football/c/94823`
-- `https://www.nike.in/nike-basketball/c/94822`
-- `https://www.nike.in/shop-all-sale/c/99440`
-- `https://www.nike.in/all-condition-gear/c/94468`
-
-#### Evidence
-
-> https://www.nike.in/new-arrivals/c/94475 — No meta description was found.
-> https://www.nike.in/best-sellers/c/94167 — No meta description was found.
-> https://www.nike.in/top-picks-under-4999/c/94477 — No meta description was found.
-> https://www.nike.in/just-do-the-work/c/94478 — No meta description was found.
-> https://www.nike.in/retro-running/c/94175 — No meta description was found.
-> https://www.nike.in/acg/c/111979 — No meta description was found.
-> https://www.nike.in/air-force-1/c/94020 — No meta description was found.
-> https://www.nike.in/air-jordan-1/c/94019 — No meta description was found.
-> https://www.nike.in/air-max/c/94031 — No meta description was found.
-> https://www.nike.in/dunk/c/94027 — No meta description was found.
-> https://www.nike.in/nike-pegasus-shoes/c/99874 — No meta description was found.
-> https://www.nike.in/nike-vomero-shoes/c/99877 — No meta description was found.
-> https://www.nike.in/nike-football/c/94823 — No meta description was found.
-> https://www.nike.in/nike-basketball/c/94822 — No meta description was found.
-> https://www.nike.in/shop-all-sale/c/99440 — No meta description was found.
-> https://www.nike.in/all-condition-gear/c/94468 — No meta description was found.
-
-#### Suggested Action
-
-Add a concise meta description that summarizes the page's main content.
-
-**Priority:** `Low`
-
----
-
-### 9. 🟢 CSS background-image detected with no adjacent text
-
-**Type:** `Issue`
-**Severity:** `Low`
-**Affected pages/resources:** 4
-
-#### Where it was found
-
-- `https://www.nike.in/`
-- `https://www.nike.in/lp/running-desktop`
-- `https://www.nike.in/lp/training-desktop`
-- `https://www.nike.in/lp/sportswear-desktop`
-
-#### Evidence
-
-> https://www.nike.in/ — Element uses a CSS background-image ('https://images-static.nykaa.com/fashion-images/pub/media/nike-images/nike/dweb_2008.png_1?tr=w-1536') and has no text content. This cannot be reliably classified as decorative vs. informative from static HTML alone -- flagged for manual review.
-> https://www.nike.in/lp/running-desktop — Element uses a CSS background-image ('https://images-static.nykaa.com/fashion-images/pub/media/nike-images/nike/still_motion_2606_dweb.jpg?tr=w-1536') and has no text content. This cannot be reliably classified as decorative vs. informative from static HTML alone -- flagged for manual review.
-> https://www.nike.in/lp/training-desktop — Element uses a CSS background-image ('https://images-static.nykaa.com/fashion-images/pub/media/nike-images/nike/dweb_2008_1.png?tr=w-1536') and has no text content. This cannot be reliably classified as decorative vs. informative from static HTML alone -- flagged for manual review.
-> https://www.nike.in/lp/sportswear-desktop — Element uses a CSS background-image ('https://images-static.nykaa.com/fashion-images/pub/media/nike-images/Banner/Sports_Desktop.jpg?tr=w-1536') and has no text content. This cannot be reliably classified as decorative vs. informative from static HTML alone -- flagged for manual review.
-
-#### Suggested Action
-
-Manually verify: if this image conveys information, provide a text equivalent nearby.
-
-**Priority:** `Low`
-
----
-
-### 10. 🟢 Video may not have captions or a text equivalent
-
-**Type:** `Warning`
-**Severity:** `Low`
-**Affected pages/resources:** 4
-
-#### Where it was found
-
-- `https://www.nike.in/`
-- `https://www.nike.in/lp/running-desktop`
-- `https://www.nike.in/lp/training-desktop`
-- `https://www.nike.in/lp/sportswear-desktop`
-
-#### Evidence
-
-> https://www.nike.in/ — Video element #1 has no <track kind='captions'> element, and nearby text loosely suggests captions/transcript may exist (keyword match only -- verify manually).
-> https://www.nike.in/lp/running-desktop — Video element #1 has no <track kind='captions'> element, and nearby text loosely suggests captions/transcript may exist (keyword match only -- verify manually).
-> https://www.nike.in/lp/training-desktop — Video element #1 has no <track kind='captions'> element, and nearby text loosely suggests captions/transcript may exist (keyword match only -- verify manually).
-> https://www.nike.in/lp/sportswear-desktop — Video element #1 has no <track kind='captions'> element, and nearby text loosely suggests captions/transcript may exist (keyword match only -- verify manually).
-
-#### Suggested Action
-
-Provide captions or a transcript when the video conveys important information.
-
-**Priority:** `Low`
-
----
-
-### 11. 🟢 URL redirects to another page
+### 7. 🟢 URL redirects to another page
 
 **Type:** `Issue`
 **Severity:** `Low`
@@ -450,6 +183,72 @@ Provide captions or a transcript when the video conveys important information.
 #### Suggested Action
 
 Prefer linking directly to the final destination URL.
+
+**Priority:** `Low`
+
+---
+
+### 8. 🟢 Page has no meta description
+
+**Type:** `Issue`
+**Severity:** `Low`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.nike.in/new-arrivals/c/94475`
+
+#### Evidence
+
+> https://www.nike.in/new-arrivals/c/94475 — No meta description was found.
+
+#### Suggested Action
+
+Add a concise meta description that summarizes the page's main content.
+
+**Priority:** `Low`
+
+---
+
+### 9. 🟢 CSS background-image detected with no adjacent text
+
+**Type:** `Issue`
+**Severity:** `Low`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.nike.in/`
+
+#### Evidence
+
+> https://www.nike.in/ — Element uses a CSS background-image ('https://images-static.nykaa.com/fashion-images/pub/media/nike-images/nike/dweb_2008.png_1?tr=w-1536') and has no text content. This cannot be reliably classified as decorative vs. informative from static HTML alone -- flagged for manual review.
+
+#### Suggested Action
+
+Manually verify: if this image conveys information, provide a text equivalent nearby.
+
+**Priority:** `Low`
+
+---
+
+### 10. 🟢 Video may not have captions or a text equivalent
+
+**Type:** `Warning`
+**Severity:** `Low`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.nike.in/`
+
+#### Evidence
+
+> https://www.nike.in/ — Video element #1 has no <track kind='captions'> element, and nearby text loosely suggests captions/transcript may exist (keyword match only -- verify manually).
+
+#### Suggested Action
+
+Provide captions or a transcript when the video conveys important information.
 
 **Priority:** `Low`
 
