@@ -61,15 +61,22 @@ async function crawlWebsite(startUrl, maxPages = 20) {
     const page = await browser.newPage();
 
     // robots.txt
-    const robots = await getRobotsRules(startUrl);
-    const crawlDelay = getCrawlDelay(robots);
+    const robotsResult = await getRobotsRules(startUrl);
+
+const robots = robotsResult.rules;
+const robotsText = robotsResult.text;
+
+const crawlDelay = getCrawlDelay(robots);
 
     const waitBeforeRequest = createRateLimiter(
-        Math.max(500, crawlDelay)
-    );
+    crawlDelay > 0 ? crawlDelay : 100
+);
 
     // sitemap.xml
-    const sitemapUrls = await discoverSitemap(startUrl);
+    const sitemapUrls = await discoverSitemap(
+    startUrl,
+    robotsText
+);
 
     log("Sitemap discovered:", sitemapUrls.length);
 
@@ -86,7 +93,9 @@ async function crawlWebsite(startUrl, maxPages = 20) {
             isSameOrigin(normalized, startUrl) &&
             isProbablyCrawlableUrl(normalized)
         ) {
-            queue.push(normalized);
+            if (!queue.includes(normalized)) {
+    queue.push(normalized);
+}
         }
     }
 

@@ -334,7 +334,10 @@ def run_engagement_audit(site_url, crawl_audit):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
-    report = module.run_audit(site_url)
+    report = module.run_audit(
+    site_url,
+    crawl_audit=crawl_audit
+)
 
     findings = report.get("findings", [])
 

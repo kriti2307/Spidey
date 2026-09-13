@@ -3,7 +3,6 @@ const robotsParser = require("robots-parser");
 async function getRobotsRules(startUrl) {
 
     const url = new URL(startUrl);
-
     const robotsUrl = `${url.origin}/robots.txt`;
 
     try {
@@ -11,19 +10,28 @@ async function getRobotsRules(startUrl) {
         const response = await fetch(robotsUrl);
 
         if (!response.ok) {
-            return null;
+            return {
+                rules: null,
+                text: null
+            };
         }
 
         const robotsText = await response.text();
 
-        return robotsParser(
-            robotsUrl,
-            robotsText
-        );
+        return {
+            rules: robotsParser(
+                robotsUrl,
+                robotsText
+            ),
+            text: robotsText
+        };
 
     } catch (error) {
 
-        return null;
+        return {
+            rules: null,
+            text: null
+        };
     }
 }
 
@@ -42,6 +50,7 @@ function isAllowed(robots, url) {
 
 
 function getCrawlDelay(robots) {
+
     if (!robots) {
         return 0;
     }
@@ -54,6 +63,7 @@ function getCrawlDelay(robots) {
         ? delay * 1000
         : 0;
 }
+
 
 module.exports = {
     getRobotsRules,
