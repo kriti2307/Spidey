@@ -70,7 +70,12 @@ the depth.
 | Present | Present | Missing | Medium |
 | Present | Present | Present | Pass (no finding) |
 
-## Check 3 — Broken links, dead-end pages & orphan pages
+## Check 3 — Broken links & dead-end pages
+
+This check owns: **can a visitor who lands on this page continue somewhere
+useful?** Sitemap/orphan-page detection is intentionally NOT part of this
+check — that's a crawlability concern (owned by another skill in this
+marketplace), not an engagement concern.
 
 - [ ] Starting from the homepage, crawl a bounded set of internal pages:
       homepage + all top-level nav destinations + their direct children,
@@ -92,83 +97,69 @@ the depth.
       page can have zero unique outlinks but still contain valuable content
       (e.g. a well-written article with no further links). Only flag when
       both signals fail together.
-- [ ] If `sitemap.xml` is available, fetch and parse it.
-- [ ] Compare sitemap URLs against the set of URLs actually reached via
-      internal-link crawling.
-- [ ] Flag any sitemap URL never reached through browsing as an
-      **orphan page**.
 
 **Severity:**
 - Critical — broken link or dead-end reached from the homepage or a
   prominent CTA (booking, contact, purchase actions).
 - High — same defect, but reached only from a secondary/nested page.
-- Medium — orphan pages (technically fine, but unreachable via normal
-  browsing).
 
 **De-duplication rule:** if the same broken URL is linked from multiple
 places on the site, report it once with a note of how many places link to
 it, rather than one finding per occurrence.
 
-## Check 4 — Mobile usability
+**Known limitation:** some sites return 4xx to automated clients on
+specific paths as anti-bot protection, even though the page works fine for
+real visitors. This can't be reliably distinguished from a genuine defect
+without a full browser. Treat single-source findings on major/high-traffic
+domains with appropriate skepticism.
+
+## Check 4 — Mobile usability (static signals only)
 
 *(Requires raw HTML access via a script — cannot be reliably checked via
-text-extraction-only tools.)*
+text-extraction-only tools. Limited to what's determinable from static
+HTML/CSS; no rendering is available to this skill.)*
 
 - [ ] Check for a `<meta name="viewport" ...>` tag in the page `<head>`.
       Its absence is the single strongest signal of mobile unreadiness.
-- [ ] If present, check the tap-target size and spacing of primary
-      interactive elements (buttons, links) — flag elements smaller than
-      common minimum touch-target guidance or spaced too closely together.
-- [ ] Check base font size is legible without requiring zoom (flag
-      unusually small base font sizes, e.g. under common minimum body-text
-      guidance).
+- [ ] Check the viewport tag's `content` includes `width=device-width` —
+      flag if present but missing this (e.g. a fixed pixel width instead).
+- [ ] Check for fixed-width elements (inline `style` attributes or `<style>`
+      blocks) specifying a pixel width greater than a mobile reference
+      width (~414px) — a static proxy for likely non-responsive layout.
+- [ ] Do NOT attempt to assess tap-target size, spacing, or font
+      readability — these require a rendered layout, which is outside this
+      skill's declared tool access. Leave this fully out of scope rather
+      than approximating it.
 
 **Severity:**
 - Critical — no viewport meta tag at all.
-- High — viewport set, but tap targets or font size clearly fail.
-- Medium — minor sizing issues on secondary/non-primary elements only.
+- Medium — viewport tag present but missing `width=device-width`, or
+  fixed-width elements exceeding the mobile reference width are detected.
 
 ## Check 5 — Page load performance
 
 *(Requires timing/network-level access via a script.)*
 
-- [ ] Measure time until the page's main content becomes usable (time to
-      first meaningful paint, or a reasonable proxy such as response time
-      of the main document request).
-- [ ] Check for render-blocking resources: large synchronous scripts or
-      stylesheets placed before main content in `<head>`.
-- [ ] Check for excessively large page payloads, especially unoptimized
-      images (large file size relative to displayed dimensions).
+- [ ] Measure HTTP response time for the initial page request.
+- [ ] Measure the HTML payload size (bytes) of the response.
+- [ ] Count synchronous `<script src>` and `<link rel="stylesheet">` tags in
+      `<head>` (excluding `async`/`defer` scripts) as a static proxy for
+      render-blocking risk.
+- [ ] Where response headers expose `Content-Length` for linked images,
+      flag unusually large image resources (e.g. over ~500KB).
 
 **Severity:**
-- Critical — load time long enough that a visitor would plausibly abandon
-  before content appears.
-- High — noticeably slow but the page is still usable.
-- Medium — isolated optimization opportunities (e.g. one oversized image)
-  that don't affect overall usability.
+- Critical — response time far exceeds a reasonable reference threshold
+  AND payload/blocking-resource count is also high.
+- High — response time alone exceeds the threshold.
+- Medium — payload size or blocking-resource count is high but response
+  time is otherwise acceptable.
 
-## Check 6 — Basic accessibility (lightweight subset)
+**Evidence must be numeric and specific**, e.g. "returned in 4.8s, payload
+1800KB, 17 synchronous script/stylesheet tags in `<head>`" — not a vague
+statement like "page seems slow."
 
-- [ ] Check every meaningful `<img>` has a non-empty `alt` attribute.
-      (Decorative images without an `alt` may be acceptable — use
-      judgment on whether the image conveys information.)
-- [ ] Check every form `<input>`/`<textarea>`/`<select>` has an associated
-      visible `<label>` (via `for`/`id` pairing or explicit wrapping).
-- [ ] Check the page has exactly one `<h1>` — flag both zero and multiple
-      `<h1>` tags as inconsistent heading structure.
-
-**Severity:**
-- High — forms with no labels at all (blocks task completion for
-  assistive-tech users).
-- Medium — missing alt text, or missing/duplicate `<h1>`.
-
-**Framing note:** report missing alt text and heading issues as `type:
-opportunity` unless they co-occur with a functional blocker (e.g. a form
-with zero labels, which blocks task completion) — treat that case as
-`type: issue` instead. This check is a lightweight subset, not full WCAG
-compliance; do not over-claim coverage.
-
-## Check 7 — Site search quality
+## Check 6 — Site search quality
 
 - [ ] Check whether an on-site search feature exists (a search input,
       often in the header, or a dedicated `/search` endpoint).
@@ -187,7 +178,27 @@ compliance; do not over-claim coverage.
 
 ---
 
-## General cross-check rules (apply across all checks)
+## Known limitations (documented, not silently hidden)
+
+- **Bot-detection / WAF false positives on Check 3.** Some sites return
+  4xx (commonly 400 or 403) to automated, non-browser clients on specific
+  paths as an anti-bot measure, even though the page works normally for
+  real visitors. This skill's static-HTTP approach cannot reliably
+  distinguish "genuinely broken for every visitor" from "blocked because
+  this looks like a bot" without a full browser (out of scope for this
+  skill's declared tools). Confirmed example during testing: a major site's
+  `/marketplace`-style page returned HTTP 400 with an empty body to this
+  script, while working normally in a real browser. Treat single-source
+  broken-link findings on well-known, high-traffic domains with appropriate
+  skepticism, and prefer manual spot-checking before treating them as
+  confirmed defects.
+- **Sitemap/orphan-page detection and generic accessibility checks (alt
+  text, heading structure) are intentionally out of scope for this skill**
+  — not implemented here because they overlap with the crawlability and
+  non-text/structured-data skills owned elsewhere in this marketplace. See
+  each check's scope note above for the specific reasoning.
+- **Tap-target sizing (mobile) is not assessed** — this requires a rendered
+  layout, which is outside this skill's static-HTTP/HTML tool access.
 
 - Do not report the same underlying defect as multiple findings just
   because it was surfaced by more than one check (e.g. a broken link found
