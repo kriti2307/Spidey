@@ -46,8 +46,7 @@ checklist split arbitrarily.
 ```
 spidey/
 ├── marketplace.json
-├── README.md
-├── shared/                    # common code shared across skills
+├── README.md                 
 └── skills/
     ├── audit-orchestrator/    # entrypoint
     ├── crawlability/
