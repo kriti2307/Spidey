@@ -448,12 +448,25 @@ def check_background_images(soup) -> list:
         match = BG_IMAGE_PATTERN.search(style)
         if not match:
             continue
+
         url = match.group(2).strip("'\" ")
+
+        # Ignore tiny inline images/icons (likely decorative)
+        if url.startswith("data:") and len(url) < 3000:
+            continue
+
+        # Truncate large base64 data URLs in evidence
+        url_for_evidence = (
+            url
+            if not url.startswith("data:")
+            else f"{url[:50]}... ({len(url)} chars, truncated)"
+        )
+
         if url in seen:
             continue
         seen.add(url)
 
-        # only worth a flag if the element also has no text content at all
+        # Only worth a flag if the element also has no text content at all
         # and isn't just a spacer (has some explicit sizing)
         if el.get_text(strip=True):
             continue
@@ -465,7 +478,8 @@ def check_background_images(soup) -> list:
             "severity": "low",
             "confidence": "low",
             "evidence": (
-                f"Element uses a CSS background-image ('{url}') and has no "
+                f"Element uses a CSS background-image "
+                f"('{url_for_evidence}') and has no "
                 "text content. This cannot be reliably classified as "
                 "decorative vs. informative from static HTML alone -- "
                 "flagged for manual review."
@@ -480,7 +494,6 @@ def check_background_images(soup) -> list:
         })
 
     return findings
-
 
 # ---------------------------------------------------------------------------
 # Multimedia checks (native <audio>/<video> + iframe embeds)

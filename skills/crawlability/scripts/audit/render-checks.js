@@ -21,8 +21,8 @@ function runRenderChecks(page) {
      * or multiple meaningful headings appear.
      */
     if (
-        textAdded >= 500 ||
-        headingsAdded >= 2
+        textAdded >= 1000 &&
+        headingsAdded >= 3
     ) {
         findings.push(
             createFinding({

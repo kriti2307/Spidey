@@ -133,12 +133,12 @@ def build_report(site, specialist_findings):
             finding,
             f"F-{len(findings) + 1:03d}"
         )
-
+        
         # Deduplicate identical findings
         dedupe_key = (
-            normalized["title"],
-            normalized["severity"],
-            normalized["evidence"]
+            finding.get("title", ""),
+            finding.get("severity", "medium"),
+            normalize_evidence(finding.get("evidence"))
         )
 
         if dedupe_key in seen_findings:

@@ -84,6 +84,14 @@ function checkRedirects(page) {
 
     if (page.redirects.length >= 3) {
 
+        // Build the real hop-by-hop chain from the data loadPage() already
+        // collects, instead of only reporting a count + the final URL.
+        // Without this, the finding was unverifiable - a reader had no way
+        // to tell whether 3 redirects was a real problem or a script bug.
+        const chain = page.redirects
+            .map((r, i) => `${i + 1}. ${r.url} (${r.status})`)
+            .join(" -> ");
+
         findings.push(
             createFinding({
                 type: "crawlability",
@@ -92,7 +100,7 @@ function checkRedirects(page) {
                 title: "Long redirect chain detected",
                 evidence: [
                     `${page.redirects.length} redirects occurred before reaching the final URL.`,
-                    `Final URL: ${page.finalUrl}`
+                    `Chain: ${page.requestedUrl} -> ${chain} -> ${page.finalUrl} (final)`
                 ],
                 recommendation:
                     "Reduce unnecessary redirect hops and point links directly to the final URL."

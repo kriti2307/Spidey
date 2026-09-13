@@ -1,24 +1,24 @@
 # Brand AI-Readiness Audit
 
-**Site:** `https://www.aciffs.in`
-**Audited at:** `2026-09-13T05:44:37Z`
+**Site:** `https://in.puma.com/in/en/`
+**Audited at:** `2026-09-13T15:17:34Z`
 
 ---
 
 ## Summary
 
-**Total findings:** 29
+**Total findings:** 34
 
 🔴 Critical: **0**  
-🟠 High: **6**  
-🟡 Medium: **17**  
-🟢 Low: **6**
+🟠 High: **9**  
+🟡 Medium: **24**  
+🟢 Low: **1**
 
 ## Top Priorities
 
-1. 🟠 **Important page content depends on JavaScript** — `High` (6 affected)
-2. 🟡 **Structured data value not found in visible content: name** — `Medium` (6 affected)
-3. 🟡 **Image may contain information that is not available as text** — `Medium` (5 affected)
+1. 🟠 **Important page content depends on JavaScript** — `High` (8 affected)
+2. 🟠 **No structured data detected** — `High` (1 affected)
+3. 🟡 **Important content appears after JavaScript rendering** — `Medium` (12 affected)
 
 ## Findings
 
@@ -26,25 +26,29 @@
 
 **Type:** `Issue`
 **Severity:** `High`
-**Affected pages/resources:** 6
+**Affected pages/resources:** 8
 
 #### Where it was found
 
-- `https://www.aciffs.in/`
-- `https://www.aciffs.in/about-us`
-- `https://www.aciffs.in/publication`
-- `https://www.aciffs.in/speakers`
-- `https://www.aciffs.in/call-for-papers`
-- `https://www.aciffs.in/for-authors/guidelines`
+- `https://in.puma.com/in/en/bls/bls-asset-fav1`
+- `https://in.puma.com/in/en/bls/shop-all-bls`
+- `https://in.puma.com/in/en/fathers-day`
+- `https://in.puma.com/in/en/fathers-day/fathers-day-gifting`
+- `https://in.puma.com/in/en/gifting-guide`
+- `https://in.puma.com/in/en/new-in`
+- `https://in.puma.com/in/en/outlet`
+- `https://in.puma.com/in/en/outlet/outlet-men`
 
 #### Evidence
 
-> https://www.aciffs.in/ — 3436 additional characters appeared after rendering 24 additional headings appeared after rendering 20 additional links appeared after rendering
-> https://www.aciffs.in/about-us — 5160 additional characters appeared after rendering 9 additional headings appeared after rendering 14 additional links appeared after rendering
-> https://www.aciffs.in/publication — 1131 additional characters appeared after rendering 4 additional headings appeared after rendering 14 additional links appeared after rendering
-> https://www.aciffs.in/speakers — 1792 additional characters appeared after rendering 4 additional headings appeared after rendering 34 additional links appeared after rendering
-> https://www.aciffs.in/call-for-papers — 709 additional characters appeared after rendering 5 additional headings appeared after rendering 14 additional links appeared after rendering
-> https://www.aciffs.in/for-authors/guidelines — 2064 additional characters appeared after rendering 5 additional headings appeared after rendering 17 additional links appeared after rendering
+> https://in.puma.com/in/en/bls/bls-asset-fav1 — 2419 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/bls/shop-all-bls — 2037 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/fathers-day — 2100 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/fathers-day/fathers-day-gifting — 2136 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/gifting-guide — 1922 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/new-in — 2259 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet — 2313 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-men — 2111 additional characters appeared after rendering 24 additional headings appeared after rendering 2 additional links appeared after rendering
 
 #### Suggested Action
 
@@ -54,55 +58,104 @@ Ensure important content is available in the initial HTML response or provide re
 
 ---
 
-### 2. 🟡 Structured data value not found in visible content: name
+### 2. 🟠 No structured data detected
 
 **Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 6
+**Severity:** `High`
+**Affected pages/resources:** 1
 
 #### Where it was found
 
-- `https://www.aciffs.in/`
-- `https://www.aciffs.in/about-us`
-- `https://www.aciffs.in/publication`
-- `https://www.aciffs.in/speakers`
-- `https://www.aciffs.in/call-for-papers`
-- `https://www.aciffs.in/for-authors/guidelines`
+- `https://in.puma.com/in/en/bls/bls-asset-fav3`
 
 #### Evidence
 
-> https://www.aciffs.in/ — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
-> https://www.aciffs.in/about-us — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
-> https://www.aciffs.in/publication — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
-> https://www.aciffs.in/speakers — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
-> https://www.aciffs.in/call-for-papers — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
-> https://www.aciffs.in/for-authors/guidelines — Structured data contains name='ACIFFS 2026 â€“ First International Conference on Advances in Computational Intelligence for Fluid and Fuzzy Systems', but that value was not found in the page's visible text.
+> https://in.puma.com/in/en/bls/bls-asset-fav3 — No JSON-LD structured data was found on the page.
 
 #### Suggested Action
 
-Verify that the structured-data 'name' value matches the visible page content.
+Add relevant Schema.org structured data.
+
+**Priority:** `High`
+
+---
+
+### 3. 🟡 Important content appears after JavaScript rendering
+
+**Type:** `Issue`
+**Severity:** `Medium`
+**Affected pages/resources:** 12
+
+#### Where it was found
+
+- `https://in.puma.com/in/en`
+- `https://in.puma.com/in/en/bls/bls-asset-fav3`
+- `https://in.puma.com/in/en/bls/bls-asset-fav5`
+- `https://in.puma.com/in/en/fathers-day/fathers-day-dadtype`
+- `https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-fit-at-home-dad`
+- `https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-wfh-dad`
+- `https://in.puma.com/in/en/outlet/outlet-kids`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-pants-and-shorts`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-t-shirts-and-tops`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-casual`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-sandals-and-flip-flops`
+- `https://in.puma.com/in/en/outlet/outlet-men/outlet-men-apparel/outlet-men-apparel-jackets`
+
+#### Evidence
+
+> https://in.puma.com/in/en — 330 additional characters appeared after rendering
+> https://in.puma.com/in/en/bls/bls-asset-fav3 — 239 additional characters appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/bls/bls-asset-fav5 — 236 additional characters appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/fathers-day/fathers-day-dadtype — 389 additional characters appeared after rendering 2 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-fit-at-home-dad — 391 additional characters appeared after rendering 2 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-wfh-dad — 231 additional characters appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-kids — 893 additional characters appeared after rendering 9 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-pants-and-shorts — 458 additional characters appeared after rendering 3 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-t-shirts-and-tops — 407 additional characters appeared after rendering 2 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-casual — 513 additional characters appeared after rendering 3 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-sandals-and-flip-flops — 353 additional characters appeared after rendering 1 additional headings appeared after rendering 2 additional links appeared after rendering
+> https://in.puma.com/in/en/outlet/outlet-men/outlet-men-apparel/outlet-men-apparel-jackets — 871 additional characters appeared after rendering 7 additional headings appeared after rendering 2 additional links appeared after rendering
+
+#### Suggested Action
+
+Ensure important page content is available in the initial HTML response rather than relying entirely on client-side rendering.
 
 **Priority:** `Medium`
 
 ---
 
-### 3. 🟡 Image may contain information that is not available as text
+### 4. 🟡 Image may contain information that is not available as text
 
 **Type:** `Issue`
 **Severity:** `Medium`
-**Affected pages/resources:** 1
+**Affected pages/resources:** 9
 
 #### Where it was found
 
-- `https://www.aciffs.in/`
+- `https://in.puma.com/in/en`
+- `https://in.puma.com/in/en/bls/bls-asset-fav1`
+- `https://in.puma.com/in/en/bls/bls-asset-fav3`
+- `https://in.puma.com/in/en/bls/bls-asset-fav5`
+- `https://in.puma.com/in/en/bls/shop-all-bls`
+- `https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-wfh-dad`
+- `https://in.puma.com/in/en/outlet/outlet-kids`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-pants-and-shorts`
+- `https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-sandals-and-flip-flops`
 
 #### Evidence
 
-> https://www.aciffs.in/ — Image #3 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.aciffs.in/ — Image #4 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.aciffs.in/ — Image #5 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.aciffs.in/ — Image #6 has no alt text. If it conveys meaningful information, that information may not be available as text.
-> https://www.aciffs.in/ — Image #7 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en — Image #28 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/bls-asset-fav1 — Image #25 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/bls-asset-fav3 — Image #3 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/bls-asset-fav3 — Image #5 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/bls-asset-fav5 — Image #8 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/bls-asset-fav5 — Image #10 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/bls/shop-all-bls — Image #27 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/fathers-day/fathers-day-dadtype/fathers-day-dadtype-wfh-dad — Image #1 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/outlet/outlet-kids — Image #12 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-pants-and-shorts — Image #4 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-apparel/outlet-kids-apparel-pants-and-shorts — Image #6 has no alt text. If it conveys meaningful information, that information may not be available as text.
+> https://in.puma.com/in/en/outlet/outlet-kids/outlet-kids-footwear/outlet-kids-footwear-sandals-and-flip-flops — Image #2 has no alt text. If it conveys meaningful information, that information may not be available as text.
 
 #### Suggested Action
 
@@ -112,84 +165,23 @@ Provide a meaningful text alternative when the image conveys important informati
 
 ---
 
-### 4. 🟡 Page lacks a primary heading
+### 5. 🟢 Page has no meta description
 
 **Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 4
-
-#### Where it was found
-
-- `https://www.aciffs.in/about-us`
-- `https://www.aciffs.in/publication`
-- `https://www.aciffs.in/speakers`
-- `https://www.aciffs.in/for-authors/guidelines`
-
-#### Evidence
-
-> https://www.aciffs.in/about-us — No <h1> element was found. 676 visible words were extracted. 9 other headings were found.
-> https://www.aciffs.in/publication — No <h1> element was found. 154 visible words were extracted. 4 other headings were found.
-> https://www.aciffs.in/speakers — No <h1> element was found. 235 visible words were extracted. 24 other headings were found.
-> https://www.aciffs.in/for-authors/guidelines — No <h1> element was found. 292 visible words were extracted. 5 other headings were found.
-
-#### Suggested Action
-
-Add a clear primary heading that identifies the page's main topic.
-
-**Priority:** `Medium`
-
----
-
-### 5. 🟡 Video may not have captions or a text equivalent
-
-**Type:** `Warning`
-**Severity:** `Medium`
+**Severity:** `Low`
 **Affected pages/resources:** 1
 
 #### Where it was found
 
-- `https://www.aciffs.in/`
+- `https://in.puma.com/in/en/bls/bls-asset-fav1`
 
 #### Evidence
 
-> https://www.aciffs.in/ — Video element #1 has no <track kind='captions'> element, and no nearby text suggests one exists.
-> https://www.aciffs.in/ — Video element #2 has no <track kind='captions'> element, and no nearby text suggests one exists.
+> https://in.puma.com/in/en/bls/bls-asset-fav1 — No meta description was found.
 
 #### Suggested Action
 
-Provide captions or a transcript when the video conveys important information.
-
-**Priority:** `Medium`
-
----
-
-### 6. 🟢 Page has no canonical URL
-
-**Type:** `Issue`
-**Severity:** `Low`
-**Affected pages/resources:** 6
-
-#### Where it was found
-
-- `https://www.aciffs.in/`
-- `https://www.aciffs.in/about-us`
-- `https://www.aciffs.in/publication`
-- `https://www.aciffs.in/speakers`
-- `https://www.aciffs.in/call-for-papers`
-- `https://www.aciffs.in/for-authors/guidelines`
-
-#### Evidence
-
-> https://www.aciffs.in/ — No <link rel="canonical"> element was found.
-> https://www.aciffs.in/about-us — No <link rel="canonical"> element was found.
-> https://www.aciffs.in/publication — No <link rel="canonical"> element was found.
-> https://www.aciffs.in/speakers — No <link rel="canonical"> element was found.
-> https://www.aciffs.in/call-for-papers — No <link rel="canonical"> element was found.
-> https://www.aciffs.in/for-authors/guidelines — No <link rel="canonical"> element was found.
-
-#### Suggested Action
-
-Add a canonical URL that identifies the preferred version of the page.
+Add a concise meta description that summarizes the page's main content.
 
 **Priority:** `Low`
 
