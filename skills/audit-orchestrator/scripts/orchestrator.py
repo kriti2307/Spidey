@@ -2,6 +2,7 @@ import sys
 import json
 from datetime import datetime, timezone
 import os
+from report_renderer import save_markdown
 
 
 SEVERITIES = ["critical", "high", "medium", "low"]
@@ -19,11 +20,10 @@ def normalize_evidence(evidence):
         return "No evidence provided."
 
     return str(evidence)
-
-
 def normalize_finding(finding, finding_id):
     """
-    Convert a specialist finding into Adobe's required format.
+    Convert a specialist finding into Adobe's required format
+    while preserving useful fields such as type and steps.
     """
 
     severity = str(
@@ -33,9 +33,20 @@ def normalize_finding(finding, finding_id):
     if severity not in SEVERITIES:
         severity = "medium"
 
+    finding_type = str(
+        finding.get("type", "issue")
+    ).lower()
+
+    if finding_type not in {
+        "issue",
+        "warning",
+        "opportunity"
+    }:
+        finding_type = "issue"
+
     recommendation = finding.get(
         "recommendation",
-        finding.get("suggested_action", "")
+        finding.get("suggested_action", {})
     )
 
     if isinstance(recommendation, dict):
@@ -45,9 +56,16 @@ def normalize_finding(finding, finding_id):
             "Review and resolve this issue."
         )
 
-        priority = recommendation.get(
-            "priority",
-            severity
+        priority = str(
+            recommendation.get(
+                "priority",
+                severity
+            )
+        ).lower()
+
+        steps = recommendation.get(
+            "steps",
+            []
         )
 
     else:
@@ -58,22 +76,34 @@ def normalize_finding(finding, finding_id):
         )
 
         priority = severity
+        steps = []
 
-    # Normalize evidence
+    if priority not in SEVERITIES:
+        priority = severity
+
     evidence = normalize_evidence(
         finding.get("evidence")
     )
 
     # Include the affected URL in the evidence
-    # so the final Adobe report clearly identifies
-    # which page produced the finding.
     url = finding.get("url")
 
     if url:
         evidence = f"{url} — {evidence}"
 
+    suggested_action = {
+        "summary": action_summary,
+        "priority": priority
+    }
+
+    # Preserve detailed mechanism-specific fix steps
+    if steps:
+        suggested_action["steps"] = steps
+
     return {
         "id": finding_id,
+
+        "type": finding_type,
 
         "title": finding.get(
             "title",
@@ -84,10 +114,7 @@ def normalize_finding(finding, finding_id):
 
         "evidence": evidence,
 
-        "suggested_action": {
-            "summary": action_summary,
-            "priority": priority
-        }
+        "suggested_action": suggested_action
     }
 
 
@@ -439,11 +466,28 @@ def main():
         specialist_findings
     )
 
+    # Save human-readable Markdown report
+    report_path = os.path.join(
+        os.getcwd(),
+        "audit-report.md"
+    )
+
+    save_markdown(
+        report,
+        report_path
+    )
+
+    # Print canonical JSON report
     print(
         json.dumps(
             report,
             indent=2
         )
+    )
+
+    print(
+        f"\nHuman-readable report saved to: {report_path}",
+        file=sys.stderr
     )
 
 

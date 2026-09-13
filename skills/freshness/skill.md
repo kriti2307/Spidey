@@ -1,5 +1,5 @@
 ---
-name: freshness-corroboration
+name: freshness
 description: >
   Audits time-sensitive information on a website for staleness, expiry,
   and internal contradiction - expired deadlines/events still presented
@@ -97,7 +97,7 @@ check needs its own file):
 - `scripts/freshness_extraction.py` — date/text parsing, JSON-LD date
   extraction, PDF text extraction, snapshot computation.
 - `scripts/freshness_checks.py` — every FR001-FR015 check function.
-- `scripts/audit_freshness.py` — the entrypoint: `audit_freshness()`,
+- `scripts/freshness.py` — the entrypoint: `freshness()`,
   which wires extraction and checks together and is what the marketplace
   entrypoint should actually call.
 
