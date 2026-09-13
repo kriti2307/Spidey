@@ -57,7 +57,7 @@ async function loadPage(page, url) {
 
         result.finalUrl = page.url();
 
-        result.success = true;
+        result.success = result.status !== null && result.status < 400;
 
         return {
             ...result,

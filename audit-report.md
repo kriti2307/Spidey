@@ -1,94 +1,72 @@
 # Brand AI-Readiness Audit
 
-**Site:** `https://www.puma.com`
-**Audited at:** `2026-09-13T16:05:31Z`
+**Site:** `https://www.wikipedia.org`
+**Audited at:** `2026-09-13T17:44:41Z`
 
 ---
 
 ## Summary
 
-**Total findings:** 4
+**Total findings:** 3
 
 🔴 Critical: **0**  
-🟠 High: **0**  
-🟡 Medium: **3**  
+🟠 High: **1**  
+🟡 Medium: **1**  
 🟢 Low: **1**
 
 ## Top Priorities
 
-1. 🟡 **Important content appears after JavaScript rendering** — `Medium` (1 affected)
-2. 🟡 **Canonical URL points to another domain** — `Medium` (1 affected)
-3. 🟡 **Image may contain information that is not available as text** — `Medium` (1 affected)
+1. 🟠 **No structured data detected** — `High` (1 affected)
+2. 🟡 **Inline SVG graphic has no accessible text equivalent** — `Medium` (1 affected)
+3. 🟢 **Page has no canonical URL** — `Low` (1 affected)
 
 ## Findings
 
-### 1. 🟡 Important content appears after JavaScript rendering
+### 1. 🟠 No structured data detected
 
 **Type:** `Issue`
+**Severity:** `High`
+**Affected pages/resources:** 1
+
+#### Where it was found
+
+- `https://www.wikipedia.org/`
+
+#### Evidence
+
+> https://www.wikipedia.org/ — No JSON-LD structured data was found on the page.
+
+#### Suggested Action
+
+Add relevant Schema.org structured data.
+
+**Priority:** `High`
+
+---
+
+### 2. 🟡 Inline SVG graphic has no accessible text equivalent
+
+**Type:** `Warning`
 **Severity:** `Medium`
 **Affected pages/resources:** 1
 
 #### Where it was found
 
-- `https://www.puma.com/`
+- `https://www.wikipedia.org/`
 
 #### Evidence
 
-> https://www.puma.com/ — 314 additional characters appeared after rendering
+> https://www.wikipedia.org/ — Inline <svg> #6 has 2 shape elements (may be an icon, chart, or diagram) but no <title> or aria-label.
 
 #### Suggested Action
 
-Ensure important page content is available in the initial HTML response rather than relying entirely on client-side rendering.
+Add a <title> or aria-label describing the SVG's content.
 
-**Priority:** `Medium`
-
----
-
-### 2. 🟡 Canonical URL points to another domain
-
-**Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 1
-
-#### Where it was found
-
-- `https://www.puma.com/`
-
-#### Evidence
-
-> https://www.puma.com/ — Canonical URL: https://in.puma.com/in/en
-
-#### Suggested Action
-
-Use a canonical URL on the same domain unless cross-domain canonicalization is intentional.
-
-**Priority:** `Medium`
+**Priority:** `Low`
 
 ---
 
-### 3. 🟡 Image may contain information that is not available as text
-
-**Type:** `Issue`
-**Severity:** `Medium`
-**Affected pages/resources:** 1
-
-#### Where it was found
-
-- `https://www.puma.com/`
-
-#### Evidence
-
-> https://www.puma.com/ — Image #28 has no alt text. If it conveys meaningful information, that information may not be available as text.
-
-#### Suggested Action
-
-Provide a meaningful text alternative when the image conveys important information.
-
-**Priority:** `Medium`
-
----
-
-### 4. 🟢 URL redirects to another page
+### 3. 🟢 Page has no canonical URL
 
 **Type:** `Issue`
 **Severity:** `Low`
@@ -96,15 +74,15 @@ Provide a meaningful text alternative when the image conveys important informati
 
 #### Where it was found
 
-- `https://www.puma.com/`
+- `https://www.wikipedia.org/`
 
 #### Evidence
 
-> https://www.puma.com/ — Requested: https://www.puma.com/ Final: https://in.puma.com/in/en
+> https://www.wikipedia.org/ — No <link rel="canonical"> element was found.
 
 #### Suggested Action
 
-Prefer linking directly to the final destination URL.
+Add a canonical URL that identifies the preferred version of the page.
 
 **Priority:** `Low`
 
